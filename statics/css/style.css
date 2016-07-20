@@ -1,0 +1,15 @@
+/*scroll table*/
+.scroll-table-head {
+    padding-right: 17px;
+}
+.scroll-table-body {
+    width: 100%;
+    height: 197px;
+    overflow-y: scroll;
+    position: relative;
+    margin-top: -20px;
+}
+.scroll-table-head table, .scroll-table-body table {
+    width: 100%;
+    word-break: break-all;
+}

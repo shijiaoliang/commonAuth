@@ -1,0 +1,201 @@
+<div class="container-fluid listStoreKnowledge wrapper-md" ng-controller="siteRmaListController"  ng-init="load()">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form class="form-validation form-inline ng-pristine ng-valid">
+                <div style="height: auto;">
+                    <div class="ng-scope">
+                        <div class="form-group m-r m-t ng-scope">
+                            <label class="base-search-label ng-scope">
+                                <span class="fixed-width-span ng-binding">
+                                    RMA No
+                                </span>
+                                <span class="ng-scope">
+                                    ：
+                                </span>
+                                <input type="text" name="rmaSheetId"  class="form-control  base-search-input"  ng-model="handlingForm.rmaSheetId" >                    
+                            </label>
+                        </div>
+
+                        <div class="form-group m-r m-t ng-scope">
+                            <label class="base-search-label ng-scope">
+                                <span class="fixed-width-span8 ng-binding">
+                                    Return Method
+                                </span>
+                                <span class="ng-scope">
+                                    ：
+                                </span>
+                                <select class="form-control  base-search-input" id="returnMethod" ng-options="cate.key as cate.value for cate in allMethod|orderBy : 'value'"  name="certificateType" ng-model="handlingForm.returnMethod" >
+                                    <option value="">----</option>
+                                </select>  
+                            </label>
+                        </div>
+
+                        <div class="form-group m-r m-t ng-scope">
+                            <label class="base-search-label ng-scope">
+                                <span class="fixed-width-span ng-binding">
+                                    Email
+                                </span>
+                                <span class="ng-scope">
+                                    ：
+                                </span>
+                                <input type="text" name="email" id="email"  class="form-control  base-search-input"  ng-model="handlingForm.email" >                    
+                            </label>
+
+                        </div>
+                        
+                        <div class="form-group m-r m-t ng-scope">
+                            <label class="base-search-label ng-scope">
+                                <span class="fixed-width-span ng-binding">
+                                    Status
+                                </span>
+                                <span class="ng-scope">
+                                    ：
+                                </span>
+                                <select class="form-control  base-search-input"  ng-options="cate.key as cate.value for cate in allStatus|orderBy : 'value'"  name="certificateType" ng-model="handlingForm.status" >
+                                    <option value="">----</option>
+                                </select>                 
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="ng-scope">
+                        <div class="form-group m-r m-t ng-scope">
+                            <label class="base-search-label ng-scope">
+                                <span class="fixed-width-span ng-binding">
+                                    Order No
+                                </span>
+                                <span class="ng-scope">
+                                    ：
+                                </span>
+                                <input type="text" name="sourceId" id="sourceId"  class="form-control  base-search-input"  ng-model="handlingForm.sourceId" >                    
+                            </label>
+                        </div>
+                        
+                        <div class="form-group m-r m-t ng-scope">
+                            <label class="base-search-label ng-scope">
+                                <span class="fixed-width-span8 ng-binding">
+                                    Service Center
+                                </span>
+                                <span class="ng-scope">
+                                    ：
+                                </span>
+                                <div class="input-group ng-scope" style="width: 200px;">
+                                    <input type="text" name="houseCode" id="houseCode"  ng-disabled="true" class="form-control" ng-model="handlingForm.houseCode"> 
+                                    <span class="input-group-btn" style="width: 1%;">
+                                        <button type="button" class="btn btn-default" ng-click="relevance()">
+                                            <i class="fa fa-search"></i>   
+                                        </button>
+                                    </span>  
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="form-group m-r m-t ng-scope">
+                            <label class="base-search-label ng-scope">
+                                <span class="fixed-width-span ng-binding">
+                                    Create Time
+                                </span>
+                                <span class="ng-scope">
+                                    ：
+                                </span>
+                                <div class="input-group ng-scope" style="width: 200px;">
+                                    <input type="text"  class="form-control" datepicker-popup="{{format}}" ng-model="handlingForm.startTime1" name="startTime" placeholder="yyyy-MM-dd" is-open="startTimeOpened" datepicker-options="dateOptions"  close-text="Close"/>
+                                    <span class="input-group-btn" style="width: 1%;">
+                                        <button type="button" class="btn btn-default" style="height: 34px;" ng-click="open('startTime', $event)">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>  
+                                </div>
+
+                            </label>
+                        </div>
+
+                        <div class="form-group m-r m-t ng-scope">
+                            <label class="base-search-label ng-scope">
+                                <span class="fixed-width-span ng-binding">
+                                    To
+                                </span>
+                                <span class="ng-scope" style="display: inline-block;width: 1em;">
+                                    ：
+                                </span>
+                                <div class="input-group ng-scope" style="width: 200px;">
+                                    <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="handlingForm.endTime1" name="endTime"  placeholder="yyyy-MM-dd" is-open="endTimeOpened" datepicker-options="dateOptions"  close-text="Close"/>
+                                    <span class="input-group-btn" style="width: 1%;">
+                                        <button type="button" class="btn btn-default" style="height: 34px;" ng-click="open('endTime', $event)">
+                                            <i class="glyphicon glyphicon-calendar"></i>
+                                        </button>
+                                    </span>  
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="ng-scope">
+                        <div class="form-group m-r m-t ng-scope">
+                            <label class="base-search-label ng-scope">
+                                <span class="fixed-width-span ng-binding">
+                                    Ticket No
+                                </span>
+                                <span class="ng-scope">
+                                    ：
+                                </span>
+                                <input type="text" name="ticketNo" id="ticketNo"  class="form-control  base-search-input"  ng-model="handlingForm.ticketNo" >
+                            </label>
+                        </div>
+
+                        <div class="form-group m-r m-t ng-scope">
+                            <label class="base-search-label ng-scope">
+                                <span class="fixed-width-span8 ng-binding">
+                                    RMA Type
+                                </span>
+                                <span class="ng-scope">
+                                    ：
+                                </span>
+                                <select class="form-control  base-search-input" id="type" ng-options="cate.key as cate.value for cate in allType|orderBy : 'value'"  name="certificateType" ng-model="handlingForm.type" >
+                                    <option value="">----</option>
+                                </select>  
+                            </label>
+                        </div>
+
+                        <div class="form-group m-r m-t ng-scope">
+                            <label class="base-search-label ng-scope">
+                                <span class="fixed-width-span ng-binding">
+                                    IMEI
+                                </span>
+                                <span class="ng-scope">
+                                    ：
+                                </span>
+                                <input type="text" name="imei" id="imei"  class="form-control  base-search-input"  ng-model="handlingForm.imei" >
+                            </label>
+                        </div>
+
+                        <div class="form-group m-r m-t ng-scope">
+                            <label class="base-search-label ng-scope">
+                                <span class="fixed-width-span ng-binding">
+                                    Pending
+                                </span>
+                                <span class="ng-scope">
+                                    ：
+                                </span>
+                                <select class="form-control  base-search-input" id="PendingType" ng-options="cate.key as cate.value for cate in allPendingType" name="PendingType" ng-model="handlingForm.pendingType" >
+                                    <option value="">----</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="ng-scope">
+                        <div class="form-group m-r m-t ng-scope">
+                            <label class="base-search-label base-search-label-btn"></label>
+                            <button class="btn m-b-xs w-xs btn-success" type="submit" ng-click="search()">{{ 'relationTemplate.search' | translate }}</button>
+                            <button class="btn m-b-xs w-xs btn-danger" type="button" ng-click="reset()" >{{ 'relationTemplate.reset' | translate }}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="panel panel-default">
+        <div  ng-include="'statics/tpl/rma/rma_list_page.html'"></div>
+    </div>

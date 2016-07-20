@@ -1,0 +1,51 @@
+<div ng-controller="siteRmaProcessController"  ng-init="loadProcess()">
+    <div class="bg-light lter b-b wrapper-md ng-scope" style="padding: 16px;text-align: left;background-color: #F0F3F;">
+        <h4 class="m-n font-thin h3" style="font-size: 16px;">
+            <strong>RMA: </strong>{{rmaSheetDetail.rmaSheetId}}
+            <strong style="margin-left: 100px;">Status: </strong>{{rmaSheetDetail.statusTxt}}
+            <span style="padding:12px 4px;" class="label bg-danger" ng-if="pending.pendingType > 0">pending {{pending.pendingReason| limitTo:40}}</span>
+
+            <!--pending button-->
+            <div style="float:right;margin-right: 100px;" class="btn-group dropdown" is-open="pending.pendingDropdownIsopen">
+                <button type="button" class="btn btn-default dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+                    Pending
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="" ng-click="addPending(10, 'spare parts');">spare parts</a></li>
+                    <li><a href="" ng-click="addPending(20, 'clarification with OnePlus');">clarification with OnePlus</a></li>
+                    <li><a href="" ng-click="addPending(30, 'clarification with customer');">clarification with customer</a></li>
+                    <li><a href="" ng-click="pendingOther();">other...</a></li>
+                    <li><a href="" style="color: red;" ng-if="pending.pendingType > 0" ng-click="cancelPending();">cancel pending</a></li>
+                </ul>
+            </div>
+            <!--end of pending button-->
+        </h4>
+    </div>
+    <tabset class="tab-container" style="padding: 20px;padding-top: 10px;">
+        <tab id="detail" active="step1" ng-click="findDetailRmaSheet()">
+            <tab-heading>
+                <span style="width:100px;font-size:15px;font-weight: bolder;padding-left: 50px;padding-right: 50px;"> Detail</span>
+            </tab-heading>
+            <div  ng-include="'statics/tpl/rma/rma_detail.html'"></div>
+        </tab>
+        <tab id="inspection" active="step2" ng-click="findInspection()">
+            <tab-heading>
+                <span style="width:100px;font-size:15px;font-weight: bolder;padding-left: 50px;padding-right: 50px;">Inspection </span>
+            </tab-heading>
+            <div  ng-include="'statics/tpl/rma/rma_inspection.html'"></div>
+        </tab>
+        <tab id="repair" active="step3" ng-click="findRepair()">
+            <tab-heading>
+                <span style="width:100px;font-size:15px;font-weight: bolder;padding-left: 50px;padding-right: 50px;">Repair </span>
+            </tab-heading>
+            <div  ng-include="'statics/tpl/rma/rma_repair.html'"></div>
+        </tab>
+        <tab id="log" active="step4" ng-click="findLog()">
+            <tab-heading>
+                <span style="width:100px;font-size:15px;font-weight: bolder;padding-left: 50px;padding-right: 50px;"> Log </span>
+            </tab-heading>
+            <div  ng-include="'statics/tpl/rma/rma_log.html'"></div>
+        </tab>
+    </tabset>
+</div>

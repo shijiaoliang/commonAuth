@@ -1,0 +1,71 @@
+<div class="table-responsive" >
+    <table class="table table-striped b-t b-light" style="margin-bottom: 0px;">
+        <thead>
+            <tr style="background-color: #EAF0F7;">
+                <th>来源</th>
+                <th>来源单据</th>
+                <th>物流商</th>
+                <th>物流单号</th>
+                <th>寄出/寄回</th>
+                <th>物流状态</th>
+                <th>同步状态</th>
+                <th>创建时间</th>
+                <th>揽收时间</th>
+                <th>到达时间</th>
+                <th>物流时效</th>
+                <th>服务商</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in rmaLogisticsList">
+                <td>{{ item.source | uppercase }}</td>
+                <td>
+                    <a ng-if="item.source == 'rma'" ui-sref="app.site.process({id:item.source_num, step:1})" target="_blank" href="#" class="text-info ng-scope" tooltip="view">
+                        {{item.source_num}}<br />
+                        <span class="badge bg-primary">{{item.rmaStatusTxt}}</span>
+                    </a>
+                    <span ng-if="item.source != 'rma'">{{item.source_num}}</span>
+                </td>
+                <td>{{item.carrier}}</td>
+                <td><a ui-sref="app.logistics.query({slug:item.carrier, tracking_number:item.tracking_number})" target="_blank" href="#" class="text-info ng-scope" tooltip="view">{{item.tracking_number}}</a></td>
+                <td>{{item.sendTypeTxt}}</td>
+                <td>{{item.deliveryStatusTxt}}</td>
+                <td>{{item.syncStatusTxt}}</td>
+                <td>{{item.created_at*1000|date:'yyyy-MM-dd HH:mm'}}</td>
+                <td>
+                    <span ng-if="item.pickup_at > 0">{{item.pickup_at*1000|date:'yyyy-MM-dd HH:mm'}}</span>
+                </td>
+                <td>
+                    <span ng-if="item.delivery_time > 0 && item.delivery_status == 6">{{item.delivery_time*1000|date:'yyyy-MM-dd HH:mm'}}</span>
+                </td>
+                <td>{{item.tat}}</td>
+                <td>{{item.serviceCenterName}}</td>
+                <!--操作-->
+                <td>
+                    <div class="btn-group dropdown open">
+                        <button class="btn btn-primary btn-sm dropdown-toggle ng-binding" aria-haspopup="true" aria-expanded="true" style="width: 50px;height: 30px;">
+                            Action
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" style="min-width: 80px;">
+                            <li><a href="" ng-click="delOne(item.id)">Delete</a></li>
+                            <!--<li><a href="" ng-if="item.active==1" ng-click="changeActive(item.id, 0)">Set No Trace</a></li>-->
+                            <!--<li><a href="" ng-if="item.active==0" ng-click="changeActive(item.id, 1)">Set Trace</a></li>-->
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+
+            <!-- 查询无数据 -->
+            <tr ng-if="!rmaLogisticsList.length">
+                <td class="text-center" colspan="13" >{{ 'navigation.NoDatas' | translate }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="panel-footer">
+    <div class="text-center" ng-show="rmaLogisticsList.length">
+        <pagination total-items="pager.totalRecord" items-per-page="pager.pageSize" ng-model="vm.currentPage" class="pagination-sm" boundary-links="true" rotate="false" max-size="6" ng-change="search()"></pagination>
+    </div>
+</div>

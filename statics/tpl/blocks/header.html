@@ -1,0 +1,97 @@
+<!-- navbar header -->
+<div class="navbar-header {{app.settings.navbarHeaderColor}}">
+    <button class="pull-right visible-xs dk" ui-toggle-class="show" data-target=".navbar-collapse"> <i class="glyphicon glyphicon-cog"></i>
+    </button>
+    <button class="pull-right visible-xs" ui-toggle-class="off-screen" data-target=".app-aside" ui-scroll="app"> <i class="glyphicon glyphicon-align-justify"></i>
+    </button>
+    <a href="#/" class="navbar-brand text-lt">
+        <img src="statics/img/logo-oneplus.png" ng-if="app.settings.asideFolded"  alt=".">
+        <img class="ng-scope" style="max-height: 30px;" ng-if="!app.settings.asideFolded" alt="." src="statics/img/logo_long.png">
+    </a>
+</div>
+<!-- / navbar header -->
+
+<!-- navbar collapse -->
+<div class="collapse navbar-collapse box-shadow {{app.settings.navbarCollapseColor}}"  ng-controller="headerController" ng-init="load();">
+    <!-- buttons -->
+    <div class="nav navbar-nav m-l-sm hidden-xs">
+        <a href class="btn no-shadow navbar-btn"  ng-click="app.settings.asideFolded = !app.settings.asideFolded">
+            <i class="fa {{app.settings.asideFolded ? 'fa-indent' : 'fa-dedent'}} fa-fw"></i>
+        </a>
+    </div>
+    <!-- / buttons -->
+
+    <!-- nabar right -->
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown hidden-sm" is-open="lang.isopen">
+            <a href class="dropdown-toggle" data-toggle="dropdown">
+            {{selectLang}} <b class="caret"></b>
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu animated fadeInRight w">
+                <li ng-repeat="(langKey, label) in langs">
+                    <a ng-click="setLang(langKey, $event)" href>{{label}}</a>
+                </li>
+            </ul>
+            <!-- / dropdown -->
+        </li>
+
+        <li class="dropdown">
+            <a href class="dropdown-toggle">
+                <i class="icon-bell fa-fw"></i>
+                <span class="visible-xs-inline">Notifications</span>
+                <span class="badge badge-sm up bg-danger pull-right-xs">{{rupdatedCount+kupdatedCount}}</span>
+            </a>
+            <!-- dropdown -->
+            <div class="dropdown-menu w-xl animated fadeInUp" ng-if="notisPrivilege">
+                <div class="panel bg-white">
+                    <div class="panel-heading b-light bg-light">
+                        <strong>
+                            <span>{{rupdatedCount+kupdatedCount}}</span>
+                            {{ 'myStoreKnowledgeNoices.detail.detail27' | translate }}
+                        </strong>
+                    </div>
+                    <div class="list-group">
+                        <a ui-sref="app.knowledge.listKnowledgeNotis"  class="media list-group-item">
+                            <span class="media-body block m-b-none">
+                            {{rupdatedCount}}{{ 'myStoreKnowledgeNoices.detail.detail28' | translate }}
+                            </span>
+                        </a>
+                        <a ui-sref="app.knowledge.myStoreKnowledge({kid:'subscription'})" class="media list-group-item">
+                            <span class="media-body block m-b-none">
+                            {{kupdatedCount}}{{ 'myStoreKnowledgeNoices.detail.detail29' | translate }}
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- / dropdown -->
+        </li>
+
+        <li class="hidden-xs">
+            <a ui-fullscreen></a>
+        </li>
+
+        <li class="dropdown">
+            <a href class="dropdown-toggle clear" data-toggle="dropdown">
+                <span class="thumb-sm avatar pull-right m-t-n-sm m-b-n-sm m-l-sm">
+                    <img src="statics/img/a0.jpg" alt="...">
+                    <i class="on md b-white bottom"></i>
+                </span>
+                <span class="hidden-sm hidden-md">{{user.empNameZh}}</span><b class="caret"></b>
+            </a>
+            <!-- dropdown -->
+            <ul class="dropdown-menu animated fadeInRight w">
+                <li>
+                    <a ng-click="logout()">{{ 'changeUserMsg.navbar.lab' | translate }}</a>
+                </li>
+                <li>
+                    <a ui-sref="app.knowledge.changeUserMsgKnowledge" href="#/app/knowledge/changeUserMsgKnowledge">{{ 'changeUserMsg.navbar.lab1' | translate }}</a>
+                </li>
+            </ul>
+            <!-- / dropdown -->
+        </li>
+    </ul>
+    <!-- / navbar right -->
+</div>
+<!-- / navbar collapse -->

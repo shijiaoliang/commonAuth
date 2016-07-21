@@ -4,31 +4,32 @@ class SiteController extends BaseController {
     private $_cnMenu = array(
         100 => array(
             array(
-                'itemname' => '知识库管理',
-                'icon' => 'glyphicon glyphicon-th',
-                'list' => array(
-                    101 => array(
-                        'name' => '知识库分类管理',
-                        'url' => 'app.knowledge.addstoreCategoryList'
-                    ),
-                )
-            )
-        )
-    );
-
-    private $_enMenu = array(
-        100 => array(
-            array(
-                'itemname' => 'Knowledge Mgt',
-                'icon' => 'glyphicon glyphicon-th',
-                'list' => array(
-                    101 => array(
-                        'name' => 'Category List',
-                        'url' => 'app.knowledge.addstoreCategoryList'
-                    ),
-                )
+                'itemname' => '应用管理',
+                'icon' => 'class="glyphicon glyphicon-th-large icon text-success',
+                'url' => 'app.app'
             )
         ),
+        200 => array(
+            array(
+                'itemname' => '模块管理',
+                'icon' => 'glyphicon glyphicon-book icon text-info-lter',
+                'url' => 'app.module'
+            )
+        ),
+        300 => array(
+            array(
+                'itemname' => '角色管理',
+                'icon' => 'glyphicon glyphicon-th',
+                'url' => 'app.role'
+            )
+        ),
+        400 => array(
+            array(
+                'itemname' => '用户管理',
+                'icon' => 'glyphicon glyphicon-th',
+                'url' => 'app.user'
+            )
+        )
     );
 
     //不校验登录

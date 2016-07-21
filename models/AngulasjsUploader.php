@@ -1,15 +1,9 @@
 <?php
-
 /**
  * Created by JetBrains PhpStorm.
- * User: taoqili
- * Date: 12-7-18
- * Time: 上午11: 32
  * UEditor编辑器通用上传类
  */
-Yii::import('service.models.extendedwarranty.ExtendedWarrantyBillModel', true);
-class AngulasjsUploader
-{
+class AngulasjsUploader {
     private $fileField; //文件域名
     private $file; //文件上传对象
     private $base64; //文件上传对象
@@ -22,7 +16,8 @@ class AngulasjsUploader
     private $fileType; //文件类型
     private $stateInfo; //上传状态信息,
     private $stateMap = array( //上传状态映射表，国际化用户需考虑此处数据的国际化
-        "SUCCESS", //上传成功标记，在UEditor中内不可改变，否则flash判断会出错
+        "SUCCESS",
+        //上传成功标记，在UEditor中内不可改变，否则flash判断会出错
         "文件大小超出 upload_max_filesize 限制",
         "文件大小超出 MAX_FILE_SIZE 限制",
         "文件未被完整上传",
@@ -50,14 +45,13 @@ class AngulasjsUploader
      * @param array $config 配置项
      * @param bool $base64 是否解析base64编码，可省略。若开启，则$fileField代表的是base64编码的字符串表单名
      */
-    public function __construct($fileField, $config, $type = "upload")
-    {
+    public function __construct($fileField, $config, $type = "upload") {
         $this->fileField = $fileField;
         $this->config = $config;
         $this->type = $type;
         if ($type == "remote") {
             $this->saveRemote();
-        } else if($type == "base64") {
+        } else if ($type == "base64") {
             $this->upBase64();
         } else {
             $this->upFile();
@@ -68,9 +62,7 @@ class AngulasjsUploader
      * 上传文件的主处理方法
      * @return mixed
      */
-    private function upFile()
-    {
-
+    private function upFile() {
         $file = $this->file = $_FILES[$this->fileField];
         if (!$file) {
             $this->stateInfo = $this->getStateInfo("ERROR_FILE_NOT_FOUND");
@@ -97,7 +89,6 @@ class AngulasjsUploader
 
         //检查文件大小是否超出限制
         if (!$this->checkSize()) {
-            
             //获取所有来源库
             $cookie = Yii::app()->request->getCookies();
             if (isset($cookie['langKey'])) {
@@ -110,7 +101,7 @@ class AngulasjsUploader
             } else {
                 $this->stateInfo = $this->getStateInfo("ERROR_SIZE_EXCEED");
             }
-            
+
             return;
         }
         //检查是否不允许的文件格式
@@ -123,7 +114,7 @@ class AngulasjsUploader
             $this->stateInfo = $this->getStateInfo("ERROR_TYPE_NOT_ALLOWED");
             return;
         }
-        
+
         //创建目录失败
         if (!file_exists($dirname) && !mkdir($dirname, 0777, true)) {
             $this->stateInfo = $this->getStateInfo("ERROR_CREATE_DIR");
@@ -138,15 +129,13 @@ class AngulasjsUploader
         } else { //移动成功
             $this->stateInfo = $this->stateMap[0];
         }
-        
     }
 
     /**
      * 处理base64编码的图片上传
      * @return mixed
      */
-    private function upBase64()
-    {
+    private function upBase64() {
         $base64Data = $_POST[$this->fileField];
         $img = base64_decode($base64Data);
         $this->oriName = $this->config['oriName'];
@@ -156,7 +145,6 @@ class AngulasjsUploader
         $this->filePath = $this->getFilePath();
         $this->fileName = $this->getFileName();
         $dirname = dirname($this->filePath);
-        
 
         //检查文件大小是否超出限制
         if (!$this->checkSize()) {
@@ -190,15 +178,13 @@ class AngulasjsUploader
         } else { //移动成功
             $this->stateInfo = $this->stateMap[0];
         }
-
     }
 
     /**
      * 拉取远程图片
      * @return mixed
      */
-    private function saveRemote()
-    {
+    private function saveRemote() {
         $imgUrl = htmlspecialchars($this->fileField);
         $imgUrl = str_replace("&amp;", "&", $imgUrl);
 
@@ -222,17 +208,18 @@ class AngulasjsUploader
 
         //打开输出缓冲区并获取远程图片
         ob_start();
-        $context = stream_context_create(
-            array('http' => array(
-                'follow_location' => false // don't follow redirects
-            ))
-        );
+        $context = stream_context_create(array(
+                'http' => array(
+                    'follow_location' => false
+                    // don't follow redirects
+                )
+            ));
         readfile($imgUrl, false, $context);
         $img = ob_get_contents();
         ob_end_clean();
         preg_match("/[\/]([^\/]*)[\.]?[^\.\/]*$/", $imgUrl, $m);
 
-        $this->oriName = $m ? $m[1]:"";
+        $this->oriName = $m ? $m[1] : "";
         $this->fileSize = strlen($img);
         $this->fileType = $this->getFileExt();
         $this->fullName = $this->getFullName();
@@ -269,10 +256,9 @@ class AngulasjsUploader
         if (!(file_put_contents($this->filePath, $img) && file_exists($this->filePath))) { //移动失败
             $this->stateInfo = $this->getStateInfo("ERROR_WRITE_CONTENT");
         } else { //移动成功
-            
+
             return $this->stateInfo = $this->stateMap[0];
         }
-
     }
 
     /**
@@ -280,8 +266,7 @@ class AngulasjsUploader
      * @param $errCode
      * @return string
      */
-    private function getStateInfo($errCode)
-    {
+    private function getStateInfo($errCode) {
         return !$this->stateMap[$errCode] ? $this->stateMap["ERROR_UNKNOWN"] : $this->stateMap[$errCode];
     }
 
@@ -289,8 +274,7 @@ class AngulasjsUploader
      * 获取文件扩展名
      * @return string
      */
-    private function getFileExt()
-    {
+    private function getFileExt() {
         return strtolower(strrchr($this->oriName, '.'));
     }
 
@@ -298,8 +282,7 @@ class AngulasjsUploader
      * 重命名文件
      * @return string
      */
-    private function getFullName()
-    {
+    private function getFullName() {
         //替换日期事件
         $t = time();
         $d = explode('-', date("Y-y-m-d-H-i-s"));
@@ -332,7 +315,7 @@ class AngulasjsUploader
      * 获取文件名
      * @return string
      */
-    private function getFileName () {
+    private function getFileName() {
         return substr($this->filePath, strrpos($this->filePath, '/') + 1);
     }
 
@@ -340,8 +323,7 @@ class AngulasjsUploader
      * 获取文件完整路径
      * @return string
      */
-    private function getFilePath()
-    {
+    private function getFilePath() {
         $fullname = $this->fullName;
         $rootPath = $_SERVER['DOCUMENT_ROOT'];
 
@@ -356,17 +338,16 @@ class AngulasjsUploader
      * 文件类型检测
      * @return bool
      */
-    private function checkType()
-    {
+    private function checkType() {
         return in_array($this->getFileExt(), $this->config["allowFiles"]);
     }
+
     /**
      * 文件类型检测
      * @return bool
      */
-    private function checkImageType($tmp_name)
-    {
-        set_error_handler(function (){
+    private function checkImageType($tmp_name) {
+        set_error_handler(function () {
             echo '';
         });
         $data = file_get_contents($tmp_name);
@@ -377,15 +358,13 @@ class AngulasjsUploader
             return false;
         }
     }
-    
-    
+
 
     /**
      * 文件大小检测
      * @return bool
      */
-    private function  checkSize()
-    {
+    private function  checkSize() {
         return $this->fileSize <= ($this->config["maxSize"]);
     }
 
@@ -393,8 +372,7 @@ class AngulasjsUploader
      * 获取当前上传成功文件的各项信息
      * @return array
      */
-    public function getFileInfo()
-    {
+    public function getFileInfo() {
         return array(
             "state" => $this->stateInfo,
             "url" => $this->fullName,
@@ -404,5 +382,4 @@ class AngulasjsUploader
             "size" => $this->fileSize
         );
     }
-
 }

@@ -1,23 +1,28 @@
 'use strict';
-/* collect Controllers */
 angular.module('app.controllers.loginController', [])
     //用户登录 controller
     .controller('loginController', function ($scope, $rootScope, $http, $state) {
         $scope.user = {};
         $scope.authError = null;
 
-        //验证默认密码是否八个8
-        $scope.checkpass = function () {
-            // Try to login
-            $http.get('/index.php?r=site/ajaxCheckoutRedis').success(function (d) {
-                if (d.ret == '-1') {
-                    $rootScope.isLogin = true;
-                    $state.go('app.knowledge.changeUserMsgKnowledge');
-                    return false;
-                }
-            })
+        //检测用户是否登录
+        $http.get('/index.php?r=site/ajaxCheckLogin').success(function (d) {
+            if (d.ret == '1') {
+                $rootScope.isLogin = true;
+                $state.go('app.knowledge.myStoreKnowledge');
+            }
+        }).error(function (x) {
+            $scope.authError = '';
+        });
+
+        //验证码
+        var captchUrl = '/index.php?r=site/ajaxVeryfy';
+        $scope.captchUrl = captchUrl;
+        $scope.changeCaptch = function () {
+            $scope.captchUrl = captchUrl + '&num=' + Math.random();
         };
 
+        //load
         $scope.load = function () {//切换大小写提示
             function isIE() {
                 if (!!window.ActiveXObject || "ActiveXObject" in window) {
@@ -72,25 +77,6 @@ angular.module('app.controllers.loginController', [])
             })()
         };
 
-        //检测用户是否登录
-        $http.get('/index.php?r=site/ajaxCheckLogin').success(function (d) {
-            //console.info(d);return false;
-            if (d.ret == '1') {
-                $rootScope.isLogin = true;
-                $scope.checkpass();
-                $state.go('app.knowledge.myStoreKnowledge');
-            }
-        }).error(function (x) {
-            $scope.authError = '';
-        });
-
-        //验证码
-        var captchUrl = '/index.php?r=site/ajaxVeryfy';
-        $scope.captchUrl = captchUrl;
-        $scope.changeCaptch = function () {
-            $scope.captchUrl = captchUrl + '&num=' + Math.random();
-        };
-
         //用户登录
         $scope.login = function () {
             $scope.authError = null;
@@ -98,7 +84,6 @@ angular.module('app.controllers.loginController', [])
             $http.post('/index.php?r=site/ajaxLogin', $scope.user).success(function (d) {
                 if (d.ret == '1') {
                     $rootScope.isLogin = true;
-                    $scope.checkpass();
                     $state.go('app.knowledge.myStoreKnowledge');
                 } else {
                     // 刷新验证码
@@ -112,3 +97,4 @@ angular.module('app.controllers.loginController', [])
             });
         };
     })
+;

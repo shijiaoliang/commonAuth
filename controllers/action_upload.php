@@ -1,10 +1,4 @@
 <?php
-/**
- * 上传附件和上传视频
- * User: Jinqn
- * Date: 14-04-09
- * Time: 上午10:17
- */
 Yii::import('application.models.AngulasjsUploader');
 /* 上传配置 */
 $base64 = "upload";

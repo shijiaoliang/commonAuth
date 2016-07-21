@@ -3,19 +3,9 @@ class BaseController extends CController {
     public $layout = 'main';
 
     /**
-     * 发布后台css,js文件
-     */
-    public $assets;
-
-    /**
      * 登录例外设置
      */
     public $load_list = array();
-
-    /**
-     * 提交参数的封装
-     */
-    public $request;
 
     /**
      * 权限code集合
@@ -28,44 +18,26 @@ class BaseController extends CController {
     public $adminUser;
 
     /**
-     * 存放用户数组
-     */
-    public $adminUserInfo;
-
-    /**
      * 当前登录用户ID
      */
     public $adminUserId;
 
+    /**
+     * 存放用户数组
+     */
+    public $adminUserInfo;
+
     public function init() {
-        $this->assets = '/statics';
-        $this->request = Yii::app()->request;
         $this->checkLoginStatus();
     }
 
-    /**
-     * 统一转化模型对象为二维数组
-     * @param array $arrModel
-     * @return array
-     */
-    protected function retArray($arrModel) {
-        $arrResult = array();
-        if (is_array($arrModel) && !empty ($arrModel)) {
-            foreach ($arrModel as $model) {
-                $arrResult [] = $model->attributes;
-            }
-        }
-
-        return $arrResult;
-    }
 
     /**
      * 验证用户是否有登录
      * 验证不通过 将会跳转到登陆页面
      */
     protected function checkLoginStatus() {
-        // 无需验证页面
-        // 只控制到action处
+        // 无需验证页面 只控制到action处
         $r_url = Yii::app()->request->getParam('r');
         $path_info = explode('/', $r_url);
         if (!isset ($path_info [0])) {
@@ -79,21 +51,30 @@ class BaseController extends CController {
 
         // 验证用户是否登录
         if (!in_array($path_name, $load_list)) {
-            $userInfo = $this->checkValidate();
-            if (!isset(yii::app()->params['PRIVILEGE_URL_LOGIN'])) {
-                throw new Exception(500, "找不到对应的配置文件，请添加配置[PRIVILEGE_URL_LOGIN]");
-            }
+            //$userInfo = $this->checkValidate();
+            //if (!$userInfo) {
+            //    if (strstr($_SERVER["QUERY_STRING"], 'angularjs=true')) {
+            //        $data = array('signinUrl' => Yii::app()->request->hostInfo . '/#/access/signin');
+            //        $this->retJSON(OpResponse::RET_ERROR, $data, '登录超时，请重新登录！');
+            //    } else {
+            //        $this->redirect(Yii::app()->request->hostInfo . '/#/access/signin');
+            //    }
+            //    Yii::app()->end();
+            //}
+        }
+    }
 
-            if (!$userInfo) {
-                // 获取上一次访问连接，并设置到登录跳转中
-                $this->onLoadToUrl(yii::app()->params['PRIVILEGE_URL_LOGIN']);
-            } else {
-                $key = 'LoadUserIdpassword_' . $this->adminJobNum;
-                $checkload = Yii::app()->redisDB->get($key);
-                if ($checkload == 1) {
-                    $this->onLoadToUrl(yii::app()->params['PRIVILEGE_URL_LOGIN']);
-                }
-            }
+    /**
+     * 跳转到指定的登录页面
+     * @param string $url
+     */
+    protected function onLoadToUrl($url = '') {
+        if (isset($_SERVER["QUERY_STRING"]) && strpos($_SERVER['QUERY_STRING'], "angularjs")) {
+            $msg = OpError::getInstance()->getMessage(OpError::ERR_VERIFY);
+            $this->retJSON(OpError::ERR_VERIFY, $url, $msg);
+        } else {
+            $str = "<script>location.href='" . $url . "'</script>";
+            exit($str);
         }
     }
 
@@ -108,7 +89,6 @@ class BaseController extends CController {
             $dataList = array();
             $dataList ['userId'] = $userInfo ['userId'];
             $dataList ['key'] = $userInfo ['key'];
-            $result = array();
             if (!$result = $this->service->privilege->checkValidate($dataList)) {
                 throw new CHttpException(500, '权限接口不通!');
             }
@@ -143,7 +123,9 @@ class BaseController extends CController {
      * @return multitype: array
      */
     protected function checkCookies() {
-        if (empty (Yii::app()->request->cookies ['power_userId']->value) || empty (Yii::app()->request->cookies ['power_userName']->value) || empty (Yii::app()->request->cookies ['power_token']->value)) {
+        if (empty (Yii::app()->request->cookies['power_userId']->value)
+            || empty (Yii::app()->request->cookies['power_userName']->value)
+            || empty (Yii::app()->request->cookies['power_token']->value)) {
             return array();
         } else {
             return array(
@@ -184,31 +166,16 @@ class BaseController extends CController {
         }
         if (empty ($isCheck) && $returnfalse) {
             if (($isajax == 1) || (isset($_SERVER["HTTP_X_REQUESTED_WITH"]) && strtolower($_SERVER["HTTP_X_REQUESTED_WITH"]) == "xmlhttprequest") || (isset($_SERVER["QUERY_STRING"]) && strpos($_SERVER['QUERY_STRING'], "angularjs"))) {
-                if (strpos($_SERVER['QUERY_STRING'], "angularjs")) {//使用angularjs发生的请求，暂时修改接口，修改调用的地方太多了，所以先这么恶心的写了。
-                    $this->retJSON(ERROR_RET, null, ERROR_NOT_POWER);
-                    //$this->retJSON(OpError::ERR_NONE, null, OpError::ERROR_NOT_POWER);
+                if (strpos($_SERVER['QUERY_STRING'], "angularjs")) {
+                    $this->retJSON(OpResponse::RET_ERROR, null, OpError::getInstance()->getMessage(OpError::ERR_VERIFY));
                 } else {
-                    $this->retJSON(ERROR_RET, array('msg' => ERROR_NOT_POWER));
+                    $this->retJSON(OpResponse::RET_ERROR, array('msg' => OpError::getInstance()->getMessage(OpError::ERR_VERIFY)));
                 }
             } else {
                 throw new CHttpException (500, "Sorry,您没有权限操作此信息!");
             }
         }
         return $isCheck;
-    }
-
-    /**
-     * 跳转到指定的登录页面
-     * @param string $url
-     */
-    protected function onLoadToUrl($url = '') {
-        if (isset($_SERVER["QUERY_STRING"]) && strpos($_SERVER['QUERY_STRING'], "angularjs")) {
-            $msg = OpError::getInstance()->getMessage(OpError::ERR_VERIFY);
-            $this->retJSON(OpError::ERR_VERIFY, $url, $msg);
-        } else {
-            $str = "<script>location.href='" . $url . "'</script>";
-            exit($str);
-        }
     }
 
     /**
@@ -220,12 +187,9 @@ class BaseController extends CController {
         $jsonArray = array();
         $jsonArray['ret'] = (int)$code;
         $jsonArray['data'] = $data;
-        if ($errMsg) {
-            $jsonArray['errMsg'] = $errMsg;
-        } else {
-            $jsonArray['errMsg'] = OpError::getInstance()->getMessage($code, $data);
-        }
-        $callBack = $this->request->getParam('success_jsonpCallback');
+        $jsonArray['errMsg'] = $errMsg;
+
+        $callBack = $this->request->getParam('jsonpCallback');
         $strJson = json_encode($jsonArray);
         if ($callBack) {
             $strJson = $callBack . '(' . $strJson . ')';

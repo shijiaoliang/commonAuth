@@ -24,11 +24,6 @@ app.config(function ($stateProvider, $urlRouterProvider, $controllerProvider, $c
         })
 
         //------------------------------------------------------模块级路由设置------------------------------------------------------
-        //知识库模块
-        .state('app.knowledge', {
-            url: '/knowledge',//如果你使用绝对 url 匹配的方式，那么你需要给你的url字符串加上特殊符号"^"
-            template: '<div ui-view class="fade-in-up"></div>'
-        })
         //用户登录页模块
         .state('access', {
             url: '/access',
@@ -38,25 +33,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $controllerProvider, $c
         //------------------------------------------------------页面级路由展示------------------------------------------------------
         .state('access.signin', {
             url: '/signin',
-            templateUrl: 'statics/tpl/knowledge/signin.html'
-        })
-        .state('access.signup', {
-            url: '/signup',
-            templateUrl: 'statics/tpl/knowledge/signin.html'
-        })
-        .state('access.forgotpwd', {
-            url: '/forgotpwd',
-            templateUrl: 'statics/tpl/page_forgotpwd.html'
-        })
-        .state('access.404', {
-            url: '/404',
-            templateUrl: 'statics/tpl/page_404.html'
-        })
-
-        //修改用户密码
-        .state('app.knowledge.changeUserMsgKnowledge', {
-            url: '/changeUserMsgKnowledge',
-            templateUrl: 'statics/tpl/knowledge/storeKnowledge_changeUserMsg.html'
+            templateUrl: 'statics/tpl/site/signin.html'
         })
 
         //物流管理 查询

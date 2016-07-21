@@ -1,7 +1,4 @@
 'use strict';
-
-//验证默认密码是否八个8
-// Declare app level module which depends on filters, and services
 var app = angular.module('app', [
         'ngAnimate',
         'ngCookies',
@@ -13,20 +10,17 @@ var app = angular.module('app', [
         'uiSwitch',
         'ui.validate',
         'pascalprecht.translate',
+        'angularFileUpload',
+        'ng.ueditor',
+
+        //自定义
         'app.filters',
         'app.services',
         'app.servicesValid',
         'app.directives',
-        'angulartics', //谷歌统计
-        'angulartics.google.analytics',//谷歌统计
-        'app.replacementPartServices', //备件Service
-        'app.orderServices',//海外订单Service
         'app.controllers',
         'app.controllers.loginController',
-        'app.controllers.headerController',
-        'angularFileUpload',
-        'ng.ueditor',
-        'ngMap'
+        'app.controllers.headerController'
     ])
 
     .run(function ($rootScope, $state, $stateParams, $http, $location) {
@@ -38,12 +32,7 @@ var app = angular.module('app', [
         $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
             if (!$rootScope.isLogin && toState.name != 'access.signin') {
                 event.preventDefault();
-                // Try to login
-                $http.get('/index.php?r=site/ajaxCheckoutRedis').success(function (d) {
-                    if (d.ret == '-1') {
-                        $state.go('app.knowledge.changeUserMsgKnowledge');
-                    }
-                });
+
                 $http.get('/index.php?r=site/ajaxCheckLogin').success(function (d) {
                     if (d.ret == '1') {
                         $rootScope.isLogin = true;
@@ -52,8 +41,6 @@ var app = angular.module('app', [
                         $state.go('access.signin');
                     }
                 });
-            } else {
-                ;
             }
         });
     })

@@ -9,6 +9,7 @@ return array(
     'import' => array(
         'application.models.*',
         'application.components.*',
+        'application.extensions.*'
     ),
     'components' => array(
         'urlManager' => array(
@@ -34,7 +35,7 @@ return array(
         ),
         'cache' => array(
             'class' => 'system.caching.CFileCache',
-            'directoryLevel' => 2
+            //'directoryLevel' => 2
         ),
         'session' => array(
             'sessionName' => 'SITESESSID',
@@ -44,11 +45,14 @@ return array(
             'timeout' => 1200,
         ),
         'db' => array(
-            'connectionString' => 'mysql:host=127.0.0.1;port=3306;dbname=auth',
-            'emulatePrepare' => true,
+            'connectionString' => 'mysql:host=127.0.0.1;dbname=auth',
             'username' => 'root',
             'password' => 'root',
             'charset' => 'utf8',
+            'tablePrefix' => '',
+            'emulatePrepare' => true,
+            'enableParamLogging' => true,
+            'enableProfiling' => true,
         ),
     ),
     'language' => 'zh_cn',

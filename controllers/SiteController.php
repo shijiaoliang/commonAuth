@@ -31,6 +31,13 @@ class SiteController extends BaseController {
         ),
     );
 
+    //不校验登录
+    public $load_list = array(
+        'site/ajaxLogin',
+        'site/ajaxCheckLogin',
+        'site/ajaxVeryfy',
+    );
+
     /**
      * 后台左边导航菜单
      */

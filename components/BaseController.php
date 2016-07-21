@@ -39,7 +39,8 @@ class BaseController extends CController {
     public function init() {
         $this->hostUrl = Yii::app()->getRequest()->hostInfo;
         $this->session = Yii::app()->session;
-        //$this->checkLoginStatus();
+
+        $this->checkLoginStatus();
     }
 
 

@@ -15,20 +15,31 @@ class BaseController extends CController {
     /**
      * 当前登录用户名
      */
-    public $adminUser;
+    public $userName;
 
     /**
      * 当前登录用户ID
      */
-    public $adminUserId;
+    public $userId;
+
+    /**
+     * 当前登录账号
+     */
+    public $userNo;
 
     /**
      * 存放用户数组
      */
-    public $adminUserInfo;
+    public $userInfo;
+
+    public $hostUrl = '';
+
+    public $session;
 
     public function init() {
-        $this->checkLoginStatus();
+        $this->hostUrl = Yii::app()->getRequest()->hostInfo;
+        $this->session = Yii::app()->session;
+        //$this->checkLoginStatus();
     }
 
 
@@ -51,16 +62,16 @@ class BaseController extends CController {
 
         // 验证用户是否登录
         if (!in_array($path_name, $load_list)) {
-            //$userInfo = $this->checkValidate();
-            //if (!$userInfo) {
-            //    if (strstr($_SERVER["QUERY_STRING"], 'angularjs=true')) {
-            //        $data = array('signinUrl' => Yii::app()->request->hostInfo . '/#/access/signin');
-            //        $this->retJSON(OpResponse::RET_ERROR, $data, '登录超时，请重新登录！');
-            //    } else {
-            //        $this->redirect(Yii::app()->request->hostInfo . '/#/access/signin');
-            //    }
-            //    Yii::app()->end();
-            //}
+            $userInfo = $this->checkValidate();
+            if (!$userInfo) {
+                if (strstr($_SERVER["QUERY_STRING"], 'angularjs=true')) {
+                    $data = array('signinUrl' => Yii::app()->request->hostInfo . '/#/access/signin');
+                    $this->retJSON(OpResponse::RET_ERROR, $data, '登录超时，请重新登录！');
+                } else {
+                    $this->redirect($this->hostUrl . '/#/access/signin');
+                }
+                Yii::app()->end();
+            }
         }
     }
 
@@ -83,74 +94,12 @@ class BaseController extends CController {
      */
     protected function checkValidate() {
         $isLogin = false;
-        $userInfo = $this->checkCookies();
 
-        if (!empty ($userInfo)) {
-            $dataList = array();
-            $dataList ['userId'] = $userInfo ['userId'];
-            $dataList ['key'] = $userInfo ['key'];
-            if (!$result = $this->service->privilege->checkValidate($dataList)) {
-                throw new CHttpException(500, '权限接口不通!');
-            }
-            if (isset($result['ret']) && ($result ['ret'] == 1)) {
-                $dataList = $result ['data'];
-                $this->powerCodeList = $dataList ['menuCode'];
-                $this->adminUser = $dataList ['empNameZh'];
-                $this->adminUserId = $userInfo ['userId'];
-                $this->adminJobNum = $dataList ['empJobNum'];
-                $this->adminUserInfo = $dataList;
-                $key = 'LoadUserId_' . $this->adminJobNum;
-                Yii::app()->redisDB->set($key, 1, AdminLoginForm::LOGIN_SUCCESS_TIME_RATE);
-                $dataateList = array();
-                $dataateList ['power_userName'] = $dataList ['empNameZh'];
-                $dataateList ['power_userId'] = $userInfo ['userId'];
-                $dataateList ['power_token'] = $userInfo ['key'];
-                $this->setCookiesUserInfo($dataateList);
-                $isLogin = true;
-            } elseif (isset($result['ret']) && ($result ['ret'] == 3)) {
-                $key = 'LoadUserId_' . $this->adminJobNum;
-                Yii::app()->redisDB->set($key, 1, AdminLoginForm::LOGIN_OUT_TIME_RATE);
-                exit($result ['errMsg']);
-            } else {
-                $isLogin = false;
-            }
+        if ($this->userId > 0) {
+            $isLogin = true;
         }
+
         return $isLogin;
-    }
-
-    /**
-     * 提取cookies信息
-     * @return multitype: array
-     */
-    protected function checkCookies() {
-        if (empty (Yii::app()->request->cookies['power_userId']->value)
-            || empty (Yii::app()->request->cookies['power_userName']->value)
-            || empty (Yii::app()->request->cookies['power_token']->value)) {
-            return array();
-        } else {
-            return array(
-                'userName' => Yii::app()->request->cookies ['power_userName']->value,
-                'userId' => Yii::app()->request->cookies ['power_userId']->value,
-                'key' => Yii::app()->request->cookies ['power_token']->value
-            );
-        }
-    }
-
-    /**
-     * 设置用户登录的cookies信息
-     * @param unknown $dataList
-     */
-    protected function setCookiesUserInfo($dataList, $time = 7200) {
-        foreach ($dataList as $k => $v) {
-            $this->setCookiesAte($k, $v, $time);
-        }
-    }
-
-    /**
-     * 设置cookiese信息
-     */
-    protected function setCookiesAte($name = '', $value = '', $time = 3600) {
-        setcookie($name, $value, time() + $time, "/", STATIC_COOKIES);
     }
 
     /**
@@ -189,7 +138,7 @@ class BaseController extends CController {
         $jsonArray['data'] = $data;
         $jsonArray['errMsg'] = $errMsg;
 
-        $callBack = $this->request->getParam('jsonpCallback');
+        $callBack = Yii::app()->getRequest()->getParam('jsonpCallback');
         $strJson = json_encode($jsonArray);
         if ($callBack) {
             $strJson = $callBack . '(' . $strJson . ')';

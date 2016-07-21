@@ -82,6 +82,7 @@ angular.module('app.controllers.loginController', [])
             $scope.authError = null;
             // Try to login
             $http.post('/index.php?r=site/ajaxLogin', $scope.user).success(function (d) {
+                console.log(d);
                 if (d.ret == '1') {
                     $rootScope.isLogin = true;
                     $state.go('app.knowledge.myStoreKnowledge');

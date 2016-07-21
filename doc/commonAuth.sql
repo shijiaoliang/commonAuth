@@ -11,13 +11,11 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- 导出 auth 的数据库结构
-DROP DATABASE IF EXISTS `auth`;
 CREATE DATABASE IF NOT EXISTS `auth` /*!40100 DEFAULT CHARACTER SET gbk */;
 USE `auth`;
 
 
 -- 导出  表 auth.app 结构
-DROP TABLE IF EXISTS `app`;
 CREATE TABLE IF NOT EXISTS `app` (
   `app_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `app_name` varchar(255) DEFAULT NULL COMMENT '应用名称',
@@ -35,7 +33,6 @@ CREATE TABLE IF NOT EXISTS `app` (
 
 
 -- 导出  表 auth.module 结构
-DROP TABLE IF EXISTS `module`;
 CREATE TABLE IF NOT EXISTS `module` (
   `module_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `module_name` varchar(255) DEFAULT NULL COMMENT '模块名称',
@@ -53,7 +50,6 @@ CREATE TABLE IF NOT EXISTS `module` (
 
 
 -- 导出  表 auth.permission 结构
-DROP TABLE IF EXISTS `permission`;
 CREATE TABLE IF NOT EXISTS `permission` (
   `p_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `p_name` varchar(255) DEFAULT NULL,
@@ -75,7 +71,6 @@ CREATE TABLE IF NOT EXISTS `permission` (
 
 
 -- 导出  表 auth.role 结构
-DROP TABLE IF EXISTS `role`;
 CREATE TABLE IF NOT EXISTS `role` (
   `role_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `role_name` varchar(255) DEFAULT NULL,
@@ -94,7 +89,6 @@ CREATE TABLE IF NOT EXISTS `role` (
 
 
 -- 导出  表 auth.user 结构
-DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_name` varchar(255) DEFAULT NULL,
@@ -111,6 +105,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 -- 正在导出表  auth.user 的数据：0 rows
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` (`user_id`, `user_name`, `user_no`, `user_pwd`, `user_status`, `role_codes`, `last_login_ip`, `last_login_time`, `user_create_time`) VALUES
+	(1, 'admin', '605724193', 'e5a1748e7863b603bc947be49a7fd631', 10, NULL, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

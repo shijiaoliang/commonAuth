@@ -14,15 +14,8 @@ class UserAR extends BaseModel {
     public function rules() {
         return array(
             array(
-                'user_no, user_pwd, captcha',
-                'required',
-                'on' => 'login'
-            ),
-            // The following rule is used by search().
-            array(
                 'user_id, user_name, user_no, user_status, role_codes, last_login_ip, last_login_time, user_create_time',
-                'safe',
-                'on' => 'search'
+                'safe'
             ),
         );
     }
@@ -34,5 +27,21 @@ class UserAR extends BaseModel {
         return array(
             'user_id' => '用户id'
         );
+    }
+
+    public function login($params = array()) {
+        if (empty($params['user_no']) || empty($params['user_pwd'])) {
+            return false;
+        }
+
+        $userNo = $params['user_no'];
+        $userPwd = md5($params['user_pwd'] . KEY);
+
+        $criteria = new CDbCriteria;
+        $criteria->condition = 'user_no=:user_no AND user_pwd=:user_pwd AND user_status=10';
+        $criteria->params = array(':user_no' => $userNo, ':user_pwd' => $userPwd);
+        $res = $this->find($criteria);
+
+        return $res;
     }
 }

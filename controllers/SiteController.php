@@ -124,35 +124,24 @@ class SiteController extends BaseController {
             $this->retJSON(OpResponse::RET_ERROR, null, 'Captcha incorrect');
         }
 
-        $model = new LoginForm();
-        $LoginForm = array(
-            'userName' => $_REQUEST['userName'],
-            'password' => $_REQUEST['password']
+        $model = new UserAR();
+        $params = array(
+            'user_no' => $_REQUEST['userName'],
+            'user_pwd' => $_REQUEST['password']
         );
-        $allErrorHTML = '';
-        $HTTP_REFERER = isset($_SERVER ['HTTP_REFERER']) ? $_SERVER ['HTTP_REFERER'] : '';
+        if (!empty($params)) {
+            if ($res = $model->login($params)) {
+                Yii::app()->session['userId'] = $res->user_id;
+                Yii::app()->session['userNo'] = $res->user_no;
+                Yii::app()->session['userName'] = $res->user_name;
+                Yii::app()->session['userInfo'] = $res;
 
-        if (!empty($LoginForm)) {
-            $model->attributes = $LoginForm;
-            $dataList = array(
-                'userName' => $model->userName,
-                'userPwd' => $model->password
-            );
-            if ($this->loadLogin($dataList)) {
-                Yii::app()->session['userName'] = $model->userName;
-                Yii::app()->session['userId'] = $model->userId;
-                $key = 'LoadUserIdpassword_' . $model->userName;
-                if ($model->password == '000000') {
-                    Yii::app()->redisDB->set($key, 1);
-                } else {
-                    Yii::app()->redisDB->set($key, 0);
-                }
-                $this->retJSON(OnePlusServiceResponse::RET_SUCCESS, array(), '');
+                $this->retJSON(OpResponse::RET_SUCCESS, $res, '');
             } else {
-                $this->retJSON(OnePlusException::PARAM_ERROR, null, 'User Name or Password incorrect');
+                $this->retJSON(OpResponse::RET_ERROR, null, 'User Name or Password incorrect');
             }
         } else {
-            $this->redirect(Yii::app()->request->hostInfo . '/#/access/signin');
+            $this->redirect($this->hostUrl . '/#/access/signin');
         }
     }
 
@@ -173,14 +162,8 @@ class SiteController extends BaseController {
      * 注销登陆
      */
     public function actionAjaxLoginout() {
-        $userInfo = $this->checkCookies();
-        if (!empty($userInfo)) {
-            $dataList = array();
-            $dataList ['power_userId'] = '';
-            $dataList ['power_token'] = '';
-            $this->setCookiesUserInfo($dataList, 0);
-        }
-        $this->retJSON(OnePlusServiceResponse::RET_SUCCESS, array(), '');
+        session_destroy();
+        $this->retJSON(OpResponse::RET_SUCCESS, array(), '');
     }
 
     /**

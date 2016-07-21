@@ -1,27 +1,7 @@
 <?php
-Yii::import('service.models.logistics.*');
 Yii::import('application.models.common.*');
-Yii::import('application.models.handlingformmodel.HandlingFormFacadeModel', true);
-Yii::import('application.models.handlingformmodel.HandlingFormConfig', true);
 
-/**
- * 物流Controller
- */
 class LogisticsController extends Controller {
-    public function init() {
-        parent::init();
-    }
-
-    /**
-     * 添加日志
-     * @param string $msg	日志消息
-     * @param int $level	日志等级
-     * @return	void
-     */
-    private function addLog($msg, $level = Log::LEVEL_INFO) {
-        Log::addLog($msg, __CLASS__, $level);
-    }
-
     //清除缓存[快递公司列表][快递单数据]
     public function actionDelCache() {
         //校验权限
@@ -100,21 +80,6 @@ class LogisticsController extends Controller {
             $this->retJSON(OnePlusServiceResponse::RET_ERROR, null, $r['errMsg']);
         }
         $trackingInfo = $r['data'];
-
-        //查询失败则尝试新增[查不到就是没有，不用新增了]
-        //if ($r['ret'] > 0) {
-        //    $rAdd = $logisticsModel->trackingsCreate($tracking_number);
-        //    if ($rAdd['ret'] > 0) {
-        //        $this->retJSON(OnePlusServiceResponse::RET_ERROR, null, $rAdd['errMsg']);
-        //    }
-        //    $trackingInfo = $rAdd['data'];
-        //} else {
-        //    $trackingInfo = $r['data'];
-        //}
-
-        //手动同步更新一次
-        //$logisticsActiveModel = new LogisticsActiveRecord();
-        //$logisticsActiveModel->updateByTrackingNumber($tracking_number);
 
         $this->retJSON(OnePlusServiceResponse::RET_SUCCESS, array(
             'trackingInfo' => $trackingInfo['tracking']

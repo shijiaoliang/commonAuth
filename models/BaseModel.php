@@ -7,9 +7,17 @@ class BaseModel extends CActiveRecord {
             'errCode' => $errCode,
             'errMsg' => $errMsg,
             'data' => $data,
-            'pager' => $pagerObj,//$objPager = new CPagination(0);
+            'pager' => $this->frontPagerObj($pagerObj)
         );
 
         return $ret;
+    }
+
+    public function frontPagerObj(CPagination $pagerObj) {
+        return array(
+            'pageSize' => $pagerObj->getPageSize(),
+            'currentPage' => $pagerObj->getCurrentPage(),
+            'itemCount' => $pagerObj->getItemCount()
+        );
     }
 }

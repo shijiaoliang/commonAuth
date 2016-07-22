@@ -8,38 +8,31 @@ class ApplicationController extends BaseController {
         if (isset($_REQUEST['listForm'])) {
             $listForm = json_decode($_REQUEST['listForm'], true);
             if (is_array($listForm)) {
-                if (!empty($listForm['keyword'])) {
-                    $arrParam['keyword'] = $listForm['keyword'];
+                if (!empty($listForm['app_name'])) {
+                    $arrParam['app_name'] = $listForm['app_name'];
                 }
             }
         }
-        print_r($_REQUEST);exit;
 
         $params = array();
-        $params['page'] = $this->page;
-        $params['limit'] = $this->pageSize;
+        $params['currentPage'] = $this->page;
+        $params['pageSize'] = $this->pageSize;
         $params = array_merge($params, $arrParam);
 
         $model = new AppAR();
-        $searchRet = $model->search($params);
+        $searchRet = $model->getList($params);
 
-        if ($searchRet['ret'] > 0 || !isset($searchRet['data'])) {
+        if ($searchRet['ret'] > 0) {
             $this->retJSON(OpResponse::RET_ERROR, null, '查询异常:' . $searchRet['errMsg']);
         }
 
         $getData = $searchRet['data'];
+        $pager = $searchRet['pager'];
 
-        new OnePlusServiceResponse($this->_callRes['ret'], $this->_callRes['errCode']
-            , $this->_callRes['errMsg'], $data, $page);
-
+        //retJSON
         $this->retJSON(OpResponse::RET_SUCCESS, array(
-                'pager' => array(
-                    'totalRecord' => $getData['count'],
-                    'pageSize' => $pageSize,
-                    'currentPage' => $page
-                ),
-                'applications' => $getData['trackings'],
-                ''
+                'pager' => $pager,
+                'applications' => $getData,
             )
         );
     }

@@ -1,0 +1,53 @@
+<div class="container-fluid wrapper-md" ng-controller="userController">
+    <div class="bg-light lter b-b wrapper-md">
+        <div class="row">
+            <div class="col-sm-6 col-xs-12">
+                <h1 class="m-n font-thin h3 text-black">修改密码</h1>
+            </div>
+        </div>
+    </div>
+
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form class="bs-example form-horizontal ng-pristine ng-valid" name="form">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">原密码</label>
+                    <div class="col-lg-10">
+                        <div class="col-lg-3">
+                            <input type="text" class="form-control" ng-model="vm.oldPssword" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">新密码</label>
+                    <div class="col-lg-10">
+                        <div class="col-lg-3">
+                            <input type="password" class="form-control" ng-model="vm.newPssword" required>
+                        </div>
+                        <div class="col-lg-9">
+                            <small class="text-muted" style="line-height: 34px;">
+                                密码长度不少于8位且必须包含大写字母，小写字母，数字，特殊字符
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">确认密码</label>
+                    <div class="col-lg-10">
+                        <div class="col-lg-3">
+                            <input type="password" class="form-control" ng-model="vm.newPssword2" required>
+                        </div>
+                        <div>
+                            <button class="btn btn-default" type="button" ng-click="changePwd()" ng-disabled="form.$invalid">
+                                确认
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

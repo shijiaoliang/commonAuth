@@ -84,12 +84,15 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     .controller('RouteController', function ($scope, $http, $state) {
         $scope.load = function () {
             $http.get('/index.php?r=site/ajaxLeftMenu').success(function (data) {
-                if (data.data.length > 0) {
-                    var urlOtherwise = '/app/application/list';
-                    for (var i in data.data[0]['list']) {
-                        urlOtherwise = data.data[0]['list'][i]['url'];
-                        break;
-                    }
+                console.log(data);
+                if (data.data) {
+                    var urlOtherwise = 'app.application.list';
+                    angular.forEach(function(y, x) {
+                        if (y.url) {
+                            urlOtherwise = y.url;
+                        }
+                    });
+
                     $state.go(urlOtherwise);
                 }
             });
@@ -98,6 +101,7 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
 
     //headerController
     .controller('headerController', function ($scope, $http, $rootScope, LogoutServer) {
+        //退出
         $scope.logout = function () {
             LogoutServer.logout();
         };
@@ -110,7 +114,6 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
             $scope.currentName = $rootScope.$state.current.name;
 
             $http.get('/index.php?r=site/ajaxLeftMenu').success(function (data) {
-                console.log(data);
                 $scope.siteMenuData = data.data;
             });
         };

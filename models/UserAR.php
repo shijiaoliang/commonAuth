@@ -29,13 +29,27 @@ class UserAR extends BaseModel {
         );
     }
 
+    /**
+     * password
+     * @param string $string
+     * @return string
+     */
+    public static function password($string = '') {
+        return md5($string . KEY);
+    }
+
+    /**
+     * login
+     * @param array $params
+     * @return bool|CActiveRecord
+     */
     public function login($params = array()) {
         if (empty($params['user_no']) || empty($params['user_pwd'])) {
             return false;
         }
 
         $userNo = $params['user_no'];
-        $userPwd = md5($params['user_pwd'] . KEY);
+        $userPwd = $this->password($params['user_pwd']);
 
         $criteria = new CDbCriteria;
         $criteria->condition = 'user_no=:user_no AND user_pwd=:user_pwd AND user_status=10';
@@ -43,5 +57,41 @@ class UserAR extends BaseModel {
         $res = $this->find($criteria);
 
         return $res;
+    }
+
+    /**
+     * changePwd
+     * @param array $params
+     * @return bool
+     */
+    public function changePwd($params = array()) {
+        if (!ParamCheck::checkArray($params, array('newPwd', 'oldPwd', 'userId'))) {
+            return false;
+        }
+
+        $userId = $params['userId'];
+
+        //根据userId查询用户信息
+        $info = $this->findByPk($userId);
+        //用户不存在
+        if (!$info) {
+            return $this->defaultResult(OpError::ERR_NONE, OpError::ERR_NONE, '该用户不存在或已被删除!');
+        }
+
+        //旧密码错误
+        if (isset($info['user_pwd']) && $info['user_pwd'] != $this->password($params['oldPwd'])) {
+            return $this->defaultResult(OpError::ERR_NONE, OpError::ERR_NONE, '旧密码错误!');
+        }
+
+        //update
+        $data = array(
+            'user_pwd' => $this->password($params['newPwd'])
+        );
+        $r = $this->updateByPk($userId, $data);
+        if (!$r) {
+            return $this->defaultResult(OpError::ERR_NONE, OpError::ERR_NONE, '更改密码失败!');
+        }
+
+        return $this->defaultResult(OpError::OK, OpError::OK, 'Success!');
     }
 }

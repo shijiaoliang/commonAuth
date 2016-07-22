@@ -25,7 +25,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $controllerProvider, $c
         })
 
         //------------------------------------------------------模块级路由设置------------------------------------------------------
-        //用户登录页模块
+        //access
         .state('access', {
             url: '/access',
             template: '<div ui-view class="fade-in-right-big smooth"></div>'
@@ -106,6 +106,19 @@ app.config(function ($stateProvider, $urlRouterProvider, $controllerProvider, $c
         .state('app.user.list', {
             url: '/list',
             templateUrl: 'statics/tpl/user/list.html',
+            resolve: {
+                deps: ['uiLoad',
+                    function (uiLoad) {
+                        return uiLoad.load([
+                            'statics/js/controllers/userController.js'
+                        ]);
+                    }
+                ]
+            }
+        })
+        .state('app.user.changePwd', {
+            url: '/changePwd',
+            templateUrl: 'statics/tpl/user/changePwd.html',
             resolve: {
                 deps: ['uiLoad',
                     function (uiLoad) {

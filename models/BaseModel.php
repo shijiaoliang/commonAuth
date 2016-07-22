@@ -1,19 +1,15 @@
 <?php
 class BaseModel extends CActiveRecord {
-    /**
-     * 检测用户密码
-     *
-     * @return boolean
-     */
-    public function validatePassword($password) {
-        return $this->hashPassword($this->password) === $password;
-    }
+    //$this->defaultResult(OpError::ERR_NONE, OpError::ERR_NONE, 'Error!');
+    public function defaultResult($ret = OpError::ERR_NONE, $errCode = OpError::ERR_NONE, $errMsg = "", $data = array(), $pagerObj = array()) {
+        $ret = array(
+            'ret' => $ret,
+            'errCode' => $errCode,
+            'errMsg' => $errMsg,
+            'data' => $data,
+            'pager' => $pagerObj,//$objPager = new CPagination(0);
+        );
 
-    /**
-     * 密码进行加密
-     * @return string password
-     */
-    public function hashPassword($password) {
-        return md5($password);
+        return $ret;
     }
 }

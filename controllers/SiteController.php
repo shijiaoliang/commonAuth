@@ -107,7 +107,11 @@ class SiteController extends BaseController {
                 Yii::app()->session['userId'] = $res->user_id;
                 Yii::app()->session['userInfo'] = $res->attributes;
 
-                $this->retJSON(OpResponse::RET_SUCCESS, null, 'ok');
+                $data = array(
+                    'userId' => $_SESSION['userId'],
+                    'userName' => $_SESSION['userInfo']['user_name']
+                );
+                $this->retJSON(OpResponse::RET_SUCCESS, $data, 'ok');
             } else {
                 $this->retJSON(OpResponse::RET_ERROR, null, 'User Name or Password incorrect');
             }
@@ -123,7 +127,11 @@ class SiteController extends BaseController {
         $userInfo = $this->checkValidate();
 
         if ($userInfo) {
-            $this->retJSON(OpResponse::RET_SUCCESS, array(), '');
+            $data = array(
+                'userId' => $_SESSION['userId'],
+                'userName' => $_SESSION['userInfo']['user_name']
+            );
+            $this->retJSON(OpResponse::RET_SUCCESS, $data, '');
         } else {
             $this->retJSON(OpResponse::RET_ERROR, null, '');
         }

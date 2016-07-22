@@ -102,7 +102,7 @@ class OpResponse {
 
     /**
      * 返回分页信息
-     * @return    OnePlusServiceResponsePage
+     * @return
      */
     public function getPage() {
         return $this->_page;
@@ -118,37 +118,17 @@ class OpResponse {
             $this->_errorCode = strval($errCode);
         } else {
             //默认的错误码是服务数据格式错误
-            $this->_errorCode = OnePlusServiceException::SERVICE_DATAFORMAT_ERROR;
+            $this->_errorCode = OpError::ERR_UNKNOW;
         }
     }
 
     /**
      * 设置错误信息
      * @param string $erMsg 错误信息
-     * @return    bool
+     * @return bool
      */
     public function setErrMsg($erMsg) {
         $this->_errMsg = $erMsg;
-    }
-
-    /**
-     * 检查分页对象
-     * @return    bool
-     */
-    public function checkPage() {
-        if (true !== ParamCheck::checkObject($this->_page, array(
-                'totalRecord',
-                'totalPage',
-                'startRecord',
-                'endRecord',
-                'currentPage',
-                'pageSize'
-            ))
-        ) {
-            return false;
-        } else {
-            return true;
-        }
     }
 
     /**
@@ -158,42 +138,4 @@ class OpResponse {
     public function setData($data) {
         $this->_data = $data;
     }
-}
-
-class OpResponsePage {
-    /**
-     * 总记录数
-     * @var int
-     */
-    public $totalRecord;
-
-    /**
-     * 总页数
-     * @var int
-     */
-    public $totalPage;
-
-    /**
-     * 起始行
-     * @var int
-     */
-    public $startRecord;
-
-    /**
-     * 结束行
-     * @var int
-     */
-    public $endRecord;
-
-    /**
-     * 当前页
-     * @var int
-     */
-    public $currentPage;
-
-    /**
-     * 每页显示条数
-     * @var int
-     */
-    public $pageSize;
 }

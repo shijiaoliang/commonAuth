@@ -1,5 +1,4 @@
 <?php
-
 class ParamCheck {
     /**
      * 值的key

@@ -31,10 +31,13 @@ var app = angular.module('app', [
             if (!$rootScope.isLogin && toState.name != 'access.signin') {
                 event.preventDefault();
 
+                //校验登录
                 $http.get('/index.php?r=site/ajaxCheckLogin').success(function (d) {
-                    console.log(d);
                     if (d.ret == '1') {
                         $rootScope.isLogin = true;
+                        $rootScope.userId = d.data.userId;
+                        $rootScope.userName = d.data.userName;
+
                         $state.go(toState.name, toParams);
                     } else {
                         $state.go('access.signin');

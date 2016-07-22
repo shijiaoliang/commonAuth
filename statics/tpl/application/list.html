@@ -1,4 +1,4 @@
-<div class="container-fluid listStoreKnowledge wrapper-md" ng-controller="applicationController" ng-init="load()">
+<div class="container-fluid wrapper-md" ng-controller="applicationController" ng-init="load()">
     <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
     <div class="panel panel-default">
         <div class="panel-body">

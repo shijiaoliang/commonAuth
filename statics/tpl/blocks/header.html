@@ -46,15 +46,15 @@
                     <img src="statics/img/a0.jpg" alt="...">
                     <i class="on md b-white bottom"></i>
                 </span>
-                <span class="hidden-sm hidden-md">{{user.empNameZh}}</span><b class="caret"></b>
+                <span class="hidden-sm hidden-md">{{userName}}</span><b class="caret"></b>
             </a>
             <!-- dropdown -->
             <ul class="dropdown-menu animated fadeInRight w">
                 <li>
-                    <a ng-click="logout()">{{ 'changeUserMsg.navbar.lab' | translate }}</a>
+                    <a ng-click="logout()">退出</a>
                 </li>
                 <li>
-                    <a ui-sref="app.knowledge.changeUserMsgKnowledge" href="#/app/knowledge/changeUserMsgKnowledge">{{ 'changeUserMsg.navbar.lab1' | translate }}</a>
+                    <a ui-sref="app.user.changePwd">修改密码</a>
                 </li>
             </ul>
             <!-- / dropdown -->

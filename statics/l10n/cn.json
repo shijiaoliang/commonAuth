@@ -1,5 +1,9 @@
 {
 	"common" : {
-		"siteName" : "commonAuth"
+		"siteName" : "commonAuth",
+	  	"noDatas":"暂无数据",
+        "disable":"禁用",
+        "modify":"修改",
+        "search":"搜索"
 	}
 }

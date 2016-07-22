@@ -13,11 +13,9 @@ class AppAR extends BaseModel {
      */
     public function rules() {
         return array(
-            // The following rule is used by search().
             array(
                 'app_id, app_name, app_code, app_status, app_url, app_create_time',
                 'safe',
-                'on' => 'search'
             ),
         );
     }

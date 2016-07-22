@@ -12,6 +12,7 @@ app.config(function ($stateProvider, $urlRouterProvider, $controllerProvider, $c
 
     //模板将被插入哪里?状态被激活时，它的模板会自动插入到父状态对应的模板中包含ui-view属性的元素内部。如果是顶层的状态，那么它的父模板就是index.html
     $urlRouterProvider.otherwise('/app/route');//规则之外的跳转
+
     $stateProvider
         .state('app', {
             abstract: true,
@@ -29,23 +30,87 @@ app.config(function ($stateProvider, $urlRouterProvider, $controllerProvider, $c
             url: '/access',
             template: '<div ui-view class="fade-in-right-big smooth"></div>'
         })
-
+        //application
+        .state('app.application', {
+            url: '/application',
+            template: '<div ui-view class="fade-in-right-big smooth"></div>'
+        })
+        //module
+        .state('app.module', {
+            url: '/module',
+            template: '<div ui-view class="fade-in-right-big smooth"></div>'
+        })
+        //role
+        .state('app.role', {
+            url: '/role',
+            template: '<div ui-view class="fade-in-right-big smooth"></div>'
+        })
+        //user
+        .state('app.user', {
+            url: '/user',
+            template: '<div ui-view class="fade-in-right-big smooth"></div>'
+        })
         //------------------------------------------------------页面级路由展示------------------------------------------------------
         .state('access.signin', {
             url: '/signin',
-            templateUrl: 'statics/tpl/site/signin.html'
-        })
-
-        //物流管理 查询
-        .state('app.logistics.query', {
-            url: '/query?slug&tracking_number',
-            templateUrl: 'statics/tpl/logistics/logistics_query.html',
+            templateUrl: 'statics/tpl/site/signin.html',
             resolve: {
                 deps: ['uiLoad',
                     function (uiLoad) {
                         return uiLoad.load([
-                            'https://maps.googleapis.com/maps/api/js?key=AIzaSyCWr2dCA34EdhN0VvautHfk70nlN0rOLXQ',
-                            'statics/js/controllers/logisticsController.js'
+                            'statics/js/controllers/loginController.js'
+                        ]);
+                    }
+                ]
+            }
+        })
+        .state('app.application.list', {
+            url: '/list',
+            templateUrl: 'statics/tpl/application/list.html',
+            resolve: {
+                deps: ['uiLoad',
+                    function (uiLoad) {
+                        return uiLoad.load([
+                            'statics/js/controllers/applicationController.js'
+                        ]);
+                    }
+                ]
+            }
+        })
+        .state('app.module.list', {
+            url: '/list',
+            templateUrl: 'statics/tpl/module/list.html',
+            resolve: {
+                deps: ['uiLoad',
+                    function (uiLoad) {
+                        return uiLoad.load([
+                            'statics/js/controllers/moduleController.js'
+                        ]);
+                    }
+                ]
+            }
+        })
+        .state('app.role.list', {
+            url: '/list',
+            templateUrl: 'statics/tpl/role/list.html',
+            resolve: {
+                deps: ['uiLoad',
+                    function (uiLoad) {
+                        return uiLoad.load([
+                            'statics/js/controllers/roleController.js'
+                        ]);
+                    }
+                ]
+            }
+        })
+        .state('app.user.list', {
+            url: '/list',
+            templateUrl: 'statics/tpl/user/list.html',
+            resolve: {
+                deps: ['uiLoad',
+                    function (uiLoad) {
+                        return uiLoad.load([
+                            'statics/js/controllers/userController.js'
                         ]);
                     }
                 ]

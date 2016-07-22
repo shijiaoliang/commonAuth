@@ -36,38 +36,6 @@
             <!-- / dropdown -->
         </li>
 
-        <li class="dropdown">
-            <a href class="dropdown-toggle">
-                <i class="icon-bell fa-fw"></i>
-                <span class="visible-xs-inline">Notifications</span>
-                <span class="badge badge-sm up bg-danger pull-right-xs">{{rupdatedCount+kupdatedCount}}</span>
-            </a>
-            <!-- dropdown -->
-            <div class="dropdown-menu w-xl animated fadeInUp" ng-if="notisPrivilege">
-                <div class="panel bg-white">
-                    <div class="panel-heading b-light bg-light">
-                        <strong>
-                            <span>{{rupdatedCount+kupdatedCount}}</span>
-                            {{ 'myStoreKnowledgeNoices.detail.detail27' | translate }}
-                        </strong>
-                    </div>
-                    <div class="list-group">
-                        <a ui-sref="app.knowledge.listKnowledgeNotis"  class="media list-group-item">
-                            <span class="media-body block m-b-none">
-                            {{rupdatedCount}}{{ 'myStoreKnowledgeNoices.detail.detail28' | translate }}
-                            </span>
-                        </a>
-                        <a ui-sref="app.knowledge.myStoreKnowledge({kid:'subscription'})" class="media list-group-item">
-                            <span class="media-body block m-b-none">
-                            {{kupdatedCount}}{{ 'myStoreKnowledgeNoices.detail.detail29' | translate }}
-                            </span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- / dropdown -->
-        </li>
-
         <li class="hidden-xs">
             <a ui-fullscreen></a>
         </li>

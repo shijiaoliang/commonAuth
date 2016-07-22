@@ -1,0 +1,20 @@
+<div class="container-fluid listStoreKnowledge wrapper-md" ng-controller="applicationController" ng-init="load()">
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="panel wrapper-sm">
+                <button class="btn btn-primary" ng-click="add()">新增应用</button>
+                <form class="form-inline pull-right ng-pristine ng-valid">
+                    <div class="form-group">
+                        <label for="keyword" class="sr-only"></label>
+                        <input type="text" class="form-control ng-pristine ng-valid ng-touched" id="keyword" ng-model="listForm.keyword" placeholder="搜索">
+                        <button class="btn btn-primary" ng-click="search()">{{ 'common.search' | translate }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div ng-include="'statics/tpl/application/list_page.html'"></div>
+    </div>
+</div>

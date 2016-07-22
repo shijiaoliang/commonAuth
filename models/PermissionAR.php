@@ -13,11 +13,9 @@ class PermissionAR extends BaseModel {
      */
     public function rules() {
         return array(
-            // The following rule is used by search().
             array(
                 'p_id, p_name, p_code, p_type, p_status, p_app_id, p_module_id, p_data_url, p_data_id, p_create_time',
                 'safe',
-                'on' => 'search'
             ),
         );
     }

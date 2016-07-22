@@ -19,8 +19,6 @@ var app = angular.module('app', [
         'app.servicesValid',
         'app.directives',
         'app.controllers',
-        'app.controllers.loginController',
-        'app.controllers.headerController'
     ])
 
     .run(function ($rootScope, $state, $stateParams, $http, $location) {
@@ -34,6 +32,7 @@ var app = angular.module('app', [
                 event.preventDefault();
 
                 $http.get('/index.php?r=site/ajaxCheckLogin').success(function (d) {
+                    console.log(d);
                     if (d.ret == '1') {
                         $rootScope.isLogin = true;
                         $state.go(toState.name, toParams);

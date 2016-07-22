@@ -2,7 +2,6 @@
 /* Services */
 // Demonstrate how to register services
 angular.module('app.services', [])
-    //注销登录 server
     .factory('LogoutServer', function ($http, $state) {
         return {
             logout: function () {
@@ -11,19 +10,6 @@ angular.module('app.services', [])
                         $state.go('access.signin');
                     }
                 })
-            }
-        };
-    })
-
-    //注销登录 server
-    .factory('ChangePassWord', function ($http, $state) {
-        return {
-            check: function () {
-                $http.get('/index.php?r=site/ajaxCheckoutRedis').success(function (d) {
-                    if (d.ret == '-1') {
-                        $state.go('app.knowledge.changeUserMsgKnowledge');
-                    }
-                });
             }
         };
     })
@@ -316,6 +302,54 @@ angular.module('app.services', [])
                 }
 
                 return instance;
+            },
+            tip: function (msg, timeOut) {
+                var instance, _template = '';
+
+                var config = {
+                    title : '提示信息',
+                    template : msg,
+                    timeOut : timeOut ? timeOut : 3000
+                };
+
+                _template += '<div class="modal-header"><h3 class="modal-title">' + config.title + '</h3></div>';
+                _template += '<div class="modal-body"><div style="text-align: center;">' + config.template + '</div></div>';
+
+                _template += '<div class="modal-footer">';
+                _template += '<button class="btn btn-primary" ng-click="ok()">OK</button>';
+                _template += '</div>';
+
+                var isClose = false;
+                instance = $modal.open({
+                    template: _template,
+                    templateUrl: '',
+                    controller: function ($scope) {
+                        $scope.ok = function () {
+                            instance.close();
+                            isClose = true;
+                        };
+                    },
+                    windowClass: 'myclass',
+                    windowTemplate: '<div class="abc43434"></div>',
+                    windowTemplateUrl: '',
+                    size: 'sm',
+                    resolve: {}
+                });
+
+                if (config.timeOut) {
+                    $timeout(function () {
+                        if (isClose == false) {
+                            try {
+                                instance.close();
+                            }
+                            catch (e) {
+                                ;
+                            }
+                        }
+                    }, config.timeOut);
+                }
+
+                return instance;
             }
         };
     })
@@ -354,3 +388,4 @@ angular.module('app.services', [])
         };
         return returnFunction;
     })
+;

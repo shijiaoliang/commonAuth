@@ -13,11 +13,9 @@ class RoleAR extends BaseModel {
      */
     public function rules() {
         return array(
-            // The following rule is used by search().
             array(
                 'role_id, role_name, role_code, role_status, permission_codes, data_role_codes, role_create_time',
                 'safe',
-                'on' => 'search'
             ),
         );
     }

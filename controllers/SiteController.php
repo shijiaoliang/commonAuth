@@ -1,36 +1,6 @@
 <?php
-
 class SiteController extends BaseController {
-    private $_cnMenu = array(
-        100 => array(
-            array(
-                'itemname' => '应用管理',
-                'icon' => 'class="glyphicon glyphicon-th-large icon text-success',
-                'url' => 'app.app'
-            )
-        ),
-        200 => array(
-            array(
-                'itemname' => '模块管理',
-                'icon' => 'glyphicon glyphicon-book icon text-info-lter',
-                'url' => 'app.module'
-            )
-        ),
-        300 => array(
-            array(
-                'itemname' => '角色管理',
-                'icon' => 'glyphicon glyphicon-th',
-                'url' => 'app.role'
-            )
-        ),
-        400 => array(
-            array(
-                'itemname' => '用户管理',
-                'icon' => 'glyphicon glyphicon-th',
-                'url' => 'app.user'
-            )
-        )
-    );
+    private $_cnMenu = array();
 
     //不校验登录
     public $load_list = array(
@@ -38,6 +8,11 @@ class SiteController extends BaseController {
         'site/ajaxCheckLogin',
         'site/ajaxVeryfy',
     );
+
+    public function init() {
+        parent::init();
+        $this->_cnMenu = Yii::app()->params['menu'];
+    }
 
     /**
      * 后台左边导航菜单
@@ -52,24 +27,14 @@ class SiteController extends BaseController {
         $language = $langKey;
         $arrMenu = $this->getPrivilegeMenu($language);
 
-        $adminUser = $this->adminUser;
-        $retunMenu = array();
-        if (is_array($arrMenu) && count($arrMenu) > 0) {
-            foreach ($arrMenu as $key => $value) {
-                $v = $value[0];
-                $v['count'] = count($v['list']);
-                $v['empNameZh'] = $adminUser;
-                $retunMenu[] = $v;
-            }
-        }
-        $this->retJSON(1, $retunMenu);
+        $this->retJSON(OpResponse::RET_SUCCESS, $arrMenu);
     }
 
     /**
      * 获取有权限的菜单
      * @author ellan
      */
-    public function getPrivilegeMenu($language) {
+    protected function getPrivilegeMenu($language) {
         switch ($language) {
             case 'cn'://中文
                 $menu = $this->_cnMenu;
@@ -81,15 +46,15 @@ class SiteController extends BaseController {
                 $menu = $this->_cnMenu;
                 break;
         }
-        foreach ($menu as $_key => $_lmenu) {
-            $tmp_menu = $this->getPrivilegeLeftMenu($_key, $_lmenu);//查询子菜单权限
-            if (count($tmp_menu) <= 0) {
-                unset($menu[$_key]);
-                continue;
-            }
-
-            $menu[$_key] = $tmp_menu;
-        }
+        //foreach ($menu as $_key => $_lmenu) {
+        //    $tmp_menu = $this->getPrivilegeLeftMenu($_key, $_lmenu);//查询子菜单权限
+        //    if (count($tmp_menu) <= 0) {
+        //        unset($menu[$_key]);
+        //        continue;
+        //    }
+        //
+        //    $menu[$_key] = $tmp_menu;
+        //}
 
         return $menu;
     }
@@ -98,7 +63,7 @@ class SiteController extends BaseController {
      * 获取子菜单有权限的菜单
      * @author ellan
      */
-    public function getPrivilegeLeftMenu($menuId, array $_lmenu) {
+    protected function getPrivilegeLeftMenu($menuId, array $_lmenu) {
         $priCode = PrivilegeCode::$arrMenuPri;
         $__lmenu = $_lmenu;
         foreach ($_lmenu as $i => $item) {
@@ -140,11 +105,9 @@ class SiteController extends BaseController {
         if (!empty($params)) {
             if ($res = $model->login($params)) {
                 Yii::app()->session['userId'] = $res->user_id;
-                Yii::app()->session['userNo'] = $res->user_no;
-                Yii::app()->session['userName'] = $res->user_name;
-                Yii::app()->session['userInfo'] = $res;
+                Yii::app()->session['userInfo'] = $res->attributes;
 
-                $this->retJSON(OpResponse::RET_SUCCESS, $res, '');
+                $this->retJSON(OpResponse::RET_SUCCESS, null, 'ok');
             } else {
                 $this->retJSON(OpResponse::RET_ERROR, null, 'User Name or Password incorrect');
             }
@@ -160,9 +123,9 @@ class SiteController extends BaseController {
         $userInfo = $this->checkValidate();
 
         if ($userInfo) {
-            $this->retJSON(OnePlusServiceResponse::RET_SUCCESS, array(), '');
+            $this->retJSON(OpResponse::RET_SUCCESS, array(), '');
         } else {
-            $this->retJSON(OnePlusException::PARAM_ERROR, null, '');
+            $this->retJSON(OpResponse::RET_ERROR, null, '');
         }
     }
 

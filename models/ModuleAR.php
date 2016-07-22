@@ -13,11 +13,9 @@ class ModuleAR extends BaseModel {
      */
     public function rules() {
         return array(
-            // The following rule is used by search().
             array(
                 'module_id, module_name, module_code, module_status, module_create_time, app_id',
                 'safe',
-                'on' => 'search'
             ),
         );
     }

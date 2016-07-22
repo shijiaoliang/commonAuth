@@ -1,5 +1,5 @@
 <!-- 左侧菜单list Start-->
-<ul ng-controller="IndexController" class="nav" ng-init="load()">
+<ul ng-controller="NavController" class="nav" ng-init="load()">
     <li ng-init="isActive=checkIsActive(menu.list)" ng-class="{active:isActive}" ng-repeat="menu in siteMenuData" class="active">
         <a href class="auto">
             <span class="pull-right text-muted">

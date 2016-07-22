@@ -34,15 +34,18 @@ class BaseController extends CController {
 
     public $hostUrl = '';
 
-    public $session;
+    /*======page======*/
+    public $page = 1;
+    public $pageSize = 15;
 
+    //init
     public function init() {
+        parent::init();
         $this->hostUrl = Yii::app()->getRequest()->hostInfo;
-        $this->session = Yii::app()->session;
 
         $this->checkLoginStatus();
+        $this->_initPage();
     }
-
 
     /**
      * 验证用户是否有登录
@@ -96,6 +99,13 @@ class BaseController extends CController {
     protected function checkValidate() {
         $isLogin = false;
 
+        if (Yii::app()->session['userId'] > 0) {
+            $this->userId = Yii::app()->session['userId'];
+            $this->userInfo = Yii::app()->session['userInfo'];
+            $this->userName = Yii::app()->session['userInfo']['user_name'];
+            $this->userNo = Yii::app()->session['userInfo']['user_no'];
+        }
+
         if ($this->userId > 0) {
             $isLogin = true;
         }
@@ -145,5 +155,15 @@ class BaseController extends CController {
             $strJson = $callBack . '(' . $strJson . ')';
         }
         Yii::app()->end($strJson);
+    }
+
+    //初始化分页
+    protected function _initPage() {
+        if (isset($_REQUEST['page'])) {
+            $this->page = intval($_REQUEST['page']);
+        }
+        if ($this->page < 1) {
+            $this->page = 1;
+        }
     }
 }

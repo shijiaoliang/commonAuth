@@ -1,19 +1,15 @@
 'use strict';
-/* Controllers */
 angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
-    .controller('AppCtrl', ['$scope', '$http', '$rootScope', '$translate', '$localStorage', '$window', 'tipDialog',
-        function ($scope, $http, $rootScope, $translate, $localStorage, $window, tipDialog) {
-            // add 'ie' classes to html
+    .controller('AppCtrl', ['$scope', '$http', '$rootScope', '$translate', '$localStorage', '$window',
+        function ($scope, $http, $rootScope, $translate, $localStorage, $window) {
             var isIE = !!navigator.userAgent.match(/MSIE/i);
             isIE && angular.element($window.document.body).addClass('ie');
             isSmartDevice($window) && angular.element($window.document.body).addClass('smart');
 
-            // config
             $scope.app = {
-                name: 'OnePlus Knowledge',
+                name: 'CommonAuth',
                 version: '1.1.3',
 
-                // for chart colors
                 color: {
                     primary: '#7266ba',
                     info: '#23b7e5',
@@ -35,7 +31,6 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
                 }
             };
 
-            // save settings to local storage
             if (angular.isDefined($localStorage.settings)) {
                 $scope.app.settings = $localStorage.settings;
             } else {
@@ -51,20 +46,17 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
             };
             $scope.langs = {
                 cn: 'Chinese',
-                en: 'English'
+                //en: 'English'
             };
             var arrCookie = document.cookie.split("; ");
             var langKey;
-            //遍历cookie数组，处理每个cookie对
             for (var i = 0; i < arrCookie.length; i++) {
                 var arr = arrCookie[i].split("=");
-                //找到名称为userId的cookie，并返回它的值
                 if ("langKey" == arr[0]) {
                     langKey = arr[1];
                     break;
                 }
             }
-            //console.info(langKey);
             if (langKey == 'en') {
                 $scope.selectLang = "English";
                 $scope.Lang = "en";
@@ -77,57 +69,49 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
             }
             $translate.use(langKey);
             $scope.setLang = function (langKey, $event) {
-                // set the current lang
                 document.cookie = "langKey=" + langKey;
                 window.location.reload();
             };
 
             function isSmartDevice($window) {
-                // Adapted from http://www.detectmobilebrowsers.com
                 var ua = $window['navigator']['userAgent'] || $window['navigator']['vendor'] || $window['opera'];
-                // Checks for iOs, Android, Blackberry, Opera Mini, and Windows mobile devices
                 return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
             }
         }
     ])
 
-    .controller('AccordionDemoCtrl', ['$scope', function ($scope) {
-        $scope.oneAtATime = true;
+    //RouteController
+    .controller('RouteController', function ($scope, $http, $state) {
+        $scope.load = function () {
+            $http.get('/index.php?r=site/ajaxLeftMenu').success(function (data) {
+                if (data.data.length > 0) {
+                    var urlOtherwise = '/app/application/list';
+                    for (var i in data.data[0]['list']) {
+                        urlOtherwise = data.data[0]['list'][i]['url'];
+                        break;
+                    }
+                    $state.go(urlOtherwise);
+                }
+            });
+        }
+    })
 
-        $scope.groups = [{
-            title: 'Accordion group header - #1',
-            content: 'Dynamic group body - #1'
-        }, {
-            title: 'Accordion group header - #2',
-            content: 'Dynamic group body - #2'
-        }];
-
-        $scope.items = ['Item 1', 'Item 2', 'Item 3'];
-
-        $scope.addItem = function () {
-            var newItemNo = $scope.items.length + 1;
-            $scope.items.push('Item ' + newItemNo);
+    //headerController
+    .controller('headerController', function ($scope, $http, $rootScope, LogoutServer) {
+        $scope.logout = function () {
+            LogoutServer.logout();
         };
+    })
 
-        $scope.status = {
-            isFirstOpen: true,
-            isFirstDisabled: false
-        };
-    }])
-
-    //菜单权限列表及登录用户信息 controller
-    .controller('IndexController', function ($scope, $http, $rootScope) {
+    //NavController
+    .controller('NavController', function ($scope, $http, $rootScope) {
         $scope.load = function() {
             //current state
             $scope.currentName = $rootScope.$state.current.name;
 
             $http.get('/index.php?r=site/ajaxLeftMenu').success(function (data) {
+                console.log(data);
                 $scope.siteMenuData = data.data;
-
-                $rootScope.user = {};
-                if (data.data && data.data[0]) {
-                    $rootScope.user.empNameZh = data.data[0].empNameZh;
-                }
             });
         };
 
@@ -144,19 +128,4 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
             return false;
         };
     })
-
-    //菜单权限列表及登录用户信息 controller
-    .controller('RouteController', function ($scope, $http, $state) {
-        $scope.load = function () {
-            $http.get('/index.php?r=site/ajaxLeftMenu').success(function (data) {
-                if (data.data.length > 0) {
-                    var urlOtherwise = '/app/knowledge/myStoreKnowledge';
-                    for (var i in data.data[0]['list']) {
-                        urlOtherwise = data.data[0]['list'][i]['url'];
-                        break;
-                    }
-                    $state.go(urlOtherwise);
-                }
-            });
-        }
-    })
+;

@@ -42,8 +42,6 @@ class UserAR extends BaseModel {
         $criteria->params = array(':user_no' => $userNo, ':user_pwd' => $userPwd);
         $res = $this->find($criteria);
 
-        print_r($res);exit;
-
         return $res;
     }
 }

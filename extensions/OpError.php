@@ -7,6 +7,18 @@ class OpError {
     const ERR_NONE = 1;
     const ERR_VERIFY = 401;
 
+    /**
+     * 参数错误
+     * @var int
+     */
+    const PARAM_ERROR  = 101;
+
+    /**
+     * 系统错误
+     * @var int
+     */
+    const SYSTEM_ERROR = 201;
+
     const ERR_UNKNOW = 900000;
 
     protected $_MESSAGES = array();

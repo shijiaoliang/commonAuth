@@ -1,0 +1,33 @@
+<div class="table-responsive" >
+    <table class="table table-striped b-t b-light">
+        <thead>
+            <tr style="background-color: #EAF0F7;">
+                <th>应用名称</th>
+                <th>应用编码</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in applications">
+                <td>{{item.app_name}}</td>
+                <td>{{item.app_code}}</td>
+                <td>{{item.app_status}}</td>
+                <td>
+                    <button class="btn btn-sm text-xs l-h-1x m-r-md btn-danger" ng-click="switch(item)">{{ 'common.disable' | translate }}</button>
+                    <button class="btn btn-sm text-xs l-h-1x m-r-md btn-primary" ng-click="update(item)">{{ 'common.modify' | translate }}</button>
+                </td>
+            </tr>
+
+            <!-- 查询无数据 -->
+            <tr ng-if="!logisticsList.length">
+                <td class="text-center" colspan="12" >{{ 'common.noDatas' | translate }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="panel-footer">
+    <div class="text-center" ng-show="applications.length > 0">
+        <pagination total-items="pager.totalRecord" items-per-page="pager.pageSize" ng-model="vm.currentPage" class="pagination-sm" boundary-links="true" rotate="false" max-size="6" ng-change="search()"></pagination>
+    </div>
+</div>

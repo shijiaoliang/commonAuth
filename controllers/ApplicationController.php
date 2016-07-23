@@ -46,12 +46,14 @@ class ApplicationController extends BaseController {
             $this->retJSON(OpResponse::RET_ERROR, null, '参数缺省!');
         }
 
+        $scenario = 'insert';
         $appId = 0;
         if (!empty($_POST['app_id'])) {
             $appId = (int)$_POST['app_id'];
+            $scenario = 'update';
         }
 
-        $model = new AppAR('save');
+        $model = new AppAR($scenario);
         if ($appId) {
             $model->setIsNewRecord(false);
         }
@@ -67,9 +69,12 @@ class ApplicationController extends BaseController {
         }
 
         $data = array();
+        $msg = '添加成功';
         if ($appId) {
             $data = AppAR::model()->findByPk($appId);
+            $msg = '更新成功';
         }
-        $this->retJSON(OpResponse::RET_SUCCESS, $data);
+
+        $this->retJSON(OpResponse::RET_SUCCESS, $data, $msg);
     }
 }

@@ -52,6 +52,7 @@ app.controller('applicationController', function($scope, $rootScope, $q, $http, 
     };
 
     $scope._addUpdate = function(item) {
+        var warpScope = $scope;
         var instance = dialog.open({
             //backdrop:false,
             templateUrl: 'applicationModal.html',
@@ -76,7 +77,7 @@ app.controller('applicationController', function($scope, $rootScope, $q, $http, 
                             if (item) {
                                 item = result;
                             } else {
-                                $scope.search();
+                                warpScope.search();
                             }
                         }
                     });

@@ -29,17 +29,17 @@ class AppAR extends BaseModel {
             array(
                 'app_name, app_code, app_url',
                 'required',
-                'on' => 'save'
+                'on' => 'insert, update'
             ),
             array(
                 'app_url',
                 'url',
-                'on' => 'save'
+                'on' => 'insert, update'
             ),
             array(
                 'app_code',
                 'unique',
-                'on' => 'save'
+                'on' => 'insert'
             ),
         );
     }

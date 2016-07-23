@@ -25,12 +25,7 @@ class AppAR extends BaseModel {
                 'app_id, app_name, app_code, app_status, app_url, app_create_time',
                 'safe',
             ),
-            
-            array(
-                'app_create_time',
-                'default',
-                'on' => 'save'
-            ),
+
             array(
                 'app_name, app_code, app_url',
                 'required',
@@ -47,6 +42,18 @@ class AppAR extends BaseModel {
                 'on' => 'save'
             ),
         );
+    }
+
+    public function beforeSave() {
+        $this->app_name = trim($this->app_name);
+        $this->app_code = trim($this->app_code);
+        $this->app_url = trim($this->app_url);
+
+        if ($this->isNewRecord) {
+            $this->app_create_time = BaseModel::$timestamp;
+        }
+
+        return true;
     }
 
     public function getList($params = array()) {

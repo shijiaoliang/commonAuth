@@ -20,15 +20,18 @@ CREATE TABLE IF NOT EXISTS `app` (
   `app_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `app_name` varchar(255) DEFAULT NULL COMMENT '应用名称',
   `app_code` varchar(255) DEFAULT NULL COMMENT '应用唯一编码',
-  `app_status` tinyint(3) unsigned DEFAULT NULL COMMENT '应用状态, 1:开启，2:禁用',
+  `app_status` tinyint(3) unsigned DEFAULT '10' COMMENT '应用状态, 1:开启，2:禁用',
   `app_url` varchar(255) DEFAULT NULL COMMENT '应用网址',
   `app_create_time` int(10) unsigned DEFAULT NULL COMMENT '应用创建时间',
   PRIMARY KEY (`app_id`),
   UNIQUE KEY `code` (`app_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk COMMENT='应用';
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=gbk COMMENT='应用';
 
--- 正在导出表  auth.app 的数据：0 rows
+-- 正在导出表  auth.app 的数据：2 rows
 /*!40000 ALTER TABLE `app` DISABLE KEYS */;
+INSERT INTO `app` (`app_id`, `app_name`, `app_code`, `app_status`, `app_url`, `app_create_time`) VALUES
+	(1, 'cms', 'CMS', 10, NULL, 1468751239),
+	(2, 'blog', 'BLOG', 10, NULL, 1469096851);
 /*!40000 ALTER TABLE `app` ENABLE KEYS */;
 
 
@@ -37,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `module` (
   `module_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `module_name` varchar(255) DEFAULT NULL COMMENT '模块名称',
   `module_code` varchar(255) DEFAULT NULL COMMENT '模块编码',
-  `module_status` tinyint(4) DEFAULT NULL COMMENT '模块状态,1:启用2:禁用',
+  `module_status` tinyint(4) DEFAULT '10' COMMENT '模块状态,1:启用2:禁用',
   `module_create_time` int(10) unsigned DEFAULT NULL COMMENT '模块创建时间',
   `app_id` int(10) unsigned DEFAULT NULL COMMENT '应用id',
   PRIMARY KEY (`module_id`),
@@ -55,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `permission` (
   `p_name` varchar(255) DEFAULT NULL,
   `p_code` varchar(255) DEFAULT NULL,
   `p_type` tinyint(3) unsigned DEFAULT '10' COMMENT '权限类型, 10:普通权限 20:数据权限',
-  `p_status` tinyint(3) unsigned DEFAULT NULL COMMENT '权限状态, 1:开启 2:禁用',
+  `p_status` tinyint(3) unsigned DEFAULT '10' COMMENT '权限状态, 1:开启 2:禁用',
   `p_app_id` int(10) unsigned DEFAULT NULL,
   `p_module_id` int(10) unsigned DEFAULT NULL,
   `p_data_url` varchar(255) DEFAULT NULL,
@@ -101,12 +104,12 @@ CREATE TABLE IF NOT EXISTS `user` (
   `user_create_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_no` (`user_no`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk COMMENT='用户表';
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=gbk COMMENT='用户表';
 
--- 正在导出表  auth.user 的数据：0 rows
+-- 正在导出表  auth.user 的数据：1 rows
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`user_id`, `user_name`, `user_no`, `user_pwd`, `user_status`, `role_codes`, `last_login_ip`, `last_login_time`, `user_create_time`) VALUES
-	(1, 'admin', '605724193', 'e5a1748e7863b603bc947be49a7fd631', 10, NULL, NULL, NULL, NULL);
+	(1, 'admin', '605724193', '8c79f3c5d22a3fd5dfe30456684da23a', 10, NULL, NULL, NULL, NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

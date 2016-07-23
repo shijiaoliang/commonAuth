@@ -70,6 +70,7 @@ app.controller('applicationController', function($scope, $rootScope, $q, $http, 
                 $scope.ok = function(formObj) {
                     $http.post('/index.php?r=application/save', $scope.ngData).success(function (res) {
                         tipDialog.tip(res.errMsg);
+
                         if (res.ret == 1) {
                             var result = res.data;
                             if (item) {

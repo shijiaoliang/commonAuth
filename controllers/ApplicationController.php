@@ -42,16 +42,34 @@ class ApplicationController extends BaseController {
         //校验权限
         //$this->checkPower(PrivilegeCode::PRI_Logistics_QUERY);
 
-        if (ParamCheck::checkArray($_POST, array('app_name', 'app_code', 'app_url'))) {
+        if (!ParamCheck::checkArray($_POST, array('app_name', 'app_code', 'app_url'))) {
             $this->retJSON(OpResponse::RET_ERROR, null, '参数缺省!');
         }
 
-        $params = array();
-        if (isset($_POST['appId'])) {
-            $params['app_id'] = (int)$_POST['appId'];
+        $appId = 0;
+        if (!empty($_POST['app_id'])) {
+            $appId = (int)$_POST['app_id'];
         }
 
-        $model = new AppAR();
-        $model->save();
+        $model = new AppAR('save');
+        if ($appId) {
+            $model->setIsNewRecord(false);
+        }
+        $model->attributes = $_POST;
+        if (!$appId) {
+            $model->app_status = 10;
+        }
+
+        $res = $model->save();
+        if (!$res) {
+            $errMsg = BaseModel::getFirstErrMsg($model);
+            $this->retJSON(OpResponse::RET_ERROR, null, $errMsg);
+        }
+
+        $data = array();
+        if ($appId) {
+            $data = AppAR::model()->findByPk($appId);
+        }
+        $this->retJSON(OpResponse::RET_SUCCESS, $data);
     }
 }

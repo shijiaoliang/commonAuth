@@ -37,7 +37,7 @@ class BaseController extends CController {
     /*======page======*/
     public $page = 1;
     public $pageSize = 15;
-
+    
     //init
     public function init() {
         parent::init();

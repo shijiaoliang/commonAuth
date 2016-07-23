@@ -25,6 +25,27 @@ class AppAR extends BaseModel {
                 'app_id, app_name, app_code, app_status, app_url, app_create_time',
                 'safe',
             ),
+            
+            array(
+                'app_create_time',
+                'default',
+                'on' => 'save'
+            ),
+            array(
+                'app_name, app_code, app_url',
+                'required',
+                'on' => 'save'
+            ),
+            array(
+                'app_url',
+                'url',
+                'on' => 'save'
+            ),
+            array(
+                'app_code',
+                'unique',
+                'on' => 'save'
+            ),
         );
     }
 

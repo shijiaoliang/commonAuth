@@ -25,10 +25,12 @@ app.controller('applicationController', function($scope, $rootScope, $q, $http, 
 
                 if ($scope.applications) {
                     angular.forEach($scope.applications, function(y, x) {
-                        //statusTxt
+                        //statusTxt switchTxt
                         y.statusTxt = '启用';
+                        y.switchTxt = '禁用';
                         if (y.app_status == 20) {
                             y.statusTxt = '禁用';
+                            y.switchTxt = '启用';
                         }
 
                         //app_create_time
@@ -42,14 +44,49 @@ app.controller('applicationController', function($scope, $rootScope, $q, $http, 
     };
 
     $scope.add = function() {
-        //
-    };
-
-    $scope.switch = function(item, event) {
-        //
+        $scope._addUpdate();
     };
 
     $scope.update = function(item, event) {
+        $scope._addUpdate(item);
+    };
+
+    $scope._addUpdate = function(item) {
+        var instance = dialog.open({
+            //backdrop:false,
+            templateUrl: 'applicationModal.html',
+            size: 'md',
+            controller: function ($scope) {
+                //appName, appCode, appUrl
+                $scope.ngData = item || {};
+
+                if (item) {
+                    $scope.ngData.appId = item.app_id;
+                }
+
+                $scope.cancel = function() {
+                    instance.close();
+                };
+                $scope.ok = function(formObj) {
+                    $http.post('/index.php?r=application/save', $scope.ngData).success(function (res) {
+                        tipDialog.tip(res.errMsg);
+                        if (res.ret == 1) {
+                            var result = res.data;
+                            if (item) {
+                                item = result;
+                            } else {
+                                $scope.search();
+                            }
+                        }
+                    });
+
+                    instance.close();
+                };
+            }
+        });
+    };
+
+    $scope.switch = function(item, event) {
         //
     };
 });

@@ -55,7 +55,7 @@ app.controller('userController', function($scope, $rootScope, $q, $http, $state,
         $http.post('/index.php?r=user/changePwd', data).success(function (res) {
             tipDialog.tip(res.errMsg);
 
-            if (res.ret == true) {
+            if (res.ret == 1) {
                 vm.oldPssword = '';
                 vm.newPssword = '';
                 vm.newPssword2 = '';

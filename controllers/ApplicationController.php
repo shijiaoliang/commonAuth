@@ -36,4 +36,22 @@ class ApplicationController extends BaseController {
             )
         );
     }
+
+    //add | update
+    public function actionSave() {
+        //校验权限
+        //$this->checkPower(PrivilegeCode::PRI_Logistics_QUERY);
+
+        if (ParamCheck::checkArray($_POST, array('app_name', 'app_code', 'app_url'))) {
+            $this->retJSON(OpResponse::RET_ERROR, null, '参数缺省!');
+        }
+
+        $params = array();
+        if (isset($_POST['appId'])) {
+            $params['app_id'] = (int)$_POST['appId'];
+        }
+
+        $model = new AppAR();
+        $model->save();
+    }
 }

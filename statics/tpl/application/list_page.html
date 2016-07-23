@@ -20,7 +20,9 @@
                 <td>{{item.app_create_time | date : 'yyyy-MM-dd HH:mm'}}</td>
                 <td>{{item.statusTxt}}</td>
                 <td>
-                    <button class="btn btn-sm text-xs l-h-1x m-r-md btn-danger" ng-click="switch(item, $event)">{{ 'common.disable' | translate }}</button>
+                    <button class="btn btn-sm text-xs l-h-1x m-r-md btn-danger" ng-click="switch(item, $event)">
+                        {{item.switchTxt}}
+                    </button>
                     <button class="btn btn-sm text-xs l-h-1x m-r-md btn-primary" ng-click="update(item, $event)">{{ 'common.modify' | translate }}</button>
                 </td>
             </tr>
@@ -37,3 +39,40 @@
         <pagination total-items="pager.itemCount" items-per-page="pager.pageSize" ng-model="vm.currentPage" class="pagination-sm" boundary-links="true" rotate="false" max-size="6" ng-change="search()"></pagination>
     </div>
 </div>
+
+<!-------------------------ng-template------------------------------>
+<!--applicationModal-->
+<script type="text/ng-template" id="applicationModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">新增应用</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal form-validation" name="formApplicationModal" ng-class="{'ng-submitted': submitted}"
+              ng-submit="submitted = true;formApplicationModal.$valid && ok(formApplicationModal)" novalidate>
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><b style="color:#F00;">*</b>应用名称:</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" placeholder="" name="appName" ng-model="ngData.app_name" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><b style="color:#F00;">*</b>应用编码:</label>
+                <div class="col-lg-10">
+                    <input type="text" class="form-control" placeholder="" name="appCode" ng-model="ngData.app_code" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><b style="color:#F00;">*</b>应用URL:</label>
+                <div class="col-lg-10">
+                    <input type="url" class="form-control" placeholder="" name="appUrl" ng-model="ngData.app_url" required>
+                </div>
+            </div>
+
+            <!--btn-->
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit" ng-disabled="formApplicationModal.$invalid">确定</button>
+                <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
+            </div>
+        </form>
+    </div>
+</script>

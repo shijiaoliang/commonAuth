@@ -3952,3 +3952,15 @@ a.text-black:hover {
     background-color: #7266ba;
   }
 }
+
+/*form-validation*/
+.form-validation .form-control.ng-dirty.ng-invalid, .ng-submitted .ng-invalid {
+    border-color: #f05050;
+}
+.form-validation .form-control.ng-dirty.ng-valid,
+.form-validation .form-control.ng-dirty.ng-valid:focus {
+    border-color: #27c24c;
+}
+.form-validation .i-checks .ng-invalid.ng-dirty + i {
+    border-color: #f05050;
+}

@@ -84,7 +84,6 @@ angular.module('app.controllers', ['pascalprecht.translate', 'ngCookies'])
     .controller('RouteController', function ($scope, $http, $state) {
         $scope.load = function () {
             $http.get('/index.php?r=site/ajaxLeftMenu').success(function (data) {
-                console.log(data);
                 if (data.data) {
                     var urlOtherwise = 'app.application.list';
                     angular.forEach(function(y, x) {

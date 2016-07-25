@@ -11,7 +11,7 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 -- 导出 auth 的数据库结构
-CREATE DATABASE IF NOT EXISTS `auth` /*!40100 DEFAULT CHARACTER SET gbk */;
+CREATE DATABASE IF NOT EXISTS `auth` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `auth`;
 
 
@@ -20,18 +20,18 @@ CREATE TABLE IF NOT EXISTS `app` (
   `app_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `app_name` varchar(255) DEFAULT NULL COMMENT '应用名称',
   `app_code` varchar(255) DEFAULT NULL COMMENT '应用唯一编码',
-  `app_status` tinyint(3) unsigned DEFAULT '10' COMMENT '应用状态, 1:开启，2:禁用',
+  `app_status` tinyint(3) unsigned DEFAULT '10' COMMENT '应用状态, 10:开启，20:禁用',
   `app_url` varchar(255) DEFAULT NULL COMMENT '应用网址',
   `app_create_time` int(10) unsigned DEFAULT NULL COMMENT '应用创建时间',
   PRIMARY KEY (`app_id`),
   UNIQUE KEY `code` (`app_code`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=gbk COMMENT='应用';
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COMMENT='应用';
 
--- 正在导出表  auth.app 的数据：2 rows
+-- 正在导出表  auth.app 的数据：~2 rows (大约)
 /*!40000 ALTER TABLE `app` DISABLE KEYS */;
 INSERT INTO `app` (`app_id`, `app_name`, `app_code`, `app_status`, `app_url`, `app_create_time`) VALUES
-	(1, 'cms', 'CMS', 10, NULL, 1468751239),
-	(2, 'blog', 'BLOG', 10, NULL, 1469096851);
+	(1, 'cms', 'CMS', 10, 'http://s.com', 4294967295),
+	(2, 'blog', 'BLOG', 20, 'http://www.baidu.com', 4294967295);
 /*!40000 ALTER TABLE `app` ENABLE KEYS */;
 
 
@@ -40,14 +40,14 @@ CREATE TABLE IF NOT EXISTS `module` (
   `module_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `module_name` varchar(255) DEFAULT NULL COMMENT '模块名称',
   `module_code` varchar(255) DEFAULT NULL COMMENT '模块编码',
-  `module_status` tinyint(4) DEFAULT '10' COMMENT '模块状态,1:启用2:禁用',
+  `module_status` tinyint(4) DEFAULT '10' COMMENT '模块状态,10:启用20:禁用',
   `module_create_time` int(10) unsigned DEFAULT NULL COMMENT '模块创建时间',
   `app_id` int(10) unsigned DEFAULT NULL COMMENT '应用id',
   PRIMARY KEY (`module_id`),
   UNIQUE KEY `module_code` (`module_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk COMMENT='应用模块表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='应用模块表';
 
--- 正在导出表  auth.module 的数据：0 rows
+-- 正在导出表  auth.module 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `module` DISABLE KEYS */;
 /*!40000 ALTER TABLE `module` ENABLE KEYS */;
 
@@ -66,9 +66,9 @@ CREATE TABLE IF NOT EXISTS `permission` (
   `p_create_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`p_id`),
   UNIQUE KEY `p_code` (`p_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk COMMENT='权限表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限表';
 
--- 正在导出表  auth.permission 的数据：0 rows
+-- 正在导出表  auth.permission 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `permission` DISABLE KEYS */;
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 
@@ -84,9 +84,9 @@ CREATE TABLE IF NOT EXISTS `role` (
   `role_create_time` int(11) unsigned zerofill DEFAULT NULL,
   PRIMARY KEY (`role_id`),
   UNIQUE KEY `role_code` (`role_code`)
-) ENGINE=MyISAM DEFAULT CHARSET=gbk COMMENT='角色表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色表';
 
--- 正在导出表  auth.role 的数据：0 rows
+-- 正在导出表  auth.role 的数据：~0 rows (大约)
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 
@@ -104,9 +104,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   `user_create_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_no` (`user_no`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=gbk COMMENT='用户表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户表';
 
--- 正在导出表  auth.user 的数据：1 rows
+-- 正在导出表  auth.user 的数据：~1 rows (大约)
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`user_id`, `user_name`, `user_no`, `user_pwd`, `user_status`, `role_codes`, `last_login_ip`, `last_login_time`, `user_create_time`) VALUES
 	(1, 'admin', '605724193', '8c79f3c5d22a3fd5dfe30456684da23a', 10, NULL, NULL, NULL, NULL);

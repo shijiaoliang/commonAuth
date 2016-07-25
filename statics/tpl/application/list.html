@@ -4,11 +4,11 @@
         <div class="panel-body">
             <div class="panel wrapper-sm">
                 <button class="btn btn-primary" ng-click="add()">新增应用</button>
-                <form class="form-inline pull-right ng-pristine ng-valid">
+                <form name="appSearchForm" class="form-inline pull-right ng-pristine ng-valid" novalidate>
                     <div class="form-group">
                         <label for="app_name" class="sr-only"></label>
-                        <input type="text" class="form-control ng-pristine ng-valid ng-touched" id="app_name" ng-model="listForm.app_name" placeholder="搜索">
-                        <button class="btn btn-primary" ng-click="search()">搜索</button>
+                        <input type="text" class="form-control ng-pristine ng-valid ng-touched" id="app_name" ng-model="listForm.app_name" placeholder="搜索" required>
+                        <button class="btn btn-primary" ng-disabled="appSearchForm.$invalid" ng-click="search()">搜索</button>
                     </div>
                 </form>
             </div>

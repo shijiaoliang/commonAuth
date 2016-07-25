@@ -7,6 +7,7 @@ class SiteController extends BaseController {
         'site/ajaxLogin',
         'site/ajaxCheckLogin',
         'site/ajaxVeryfy',
+        'site/ajaxLoginout',
     );
 
     public function init() {
@@ -141,7 +142,7 @@ class SiteController extends BaseController {
      * 注销登陆
      */
     public function actionAjaxLoginout() {
-        session_destroy();
+        Yii::app()->session->destroy();
         $this->retJSON(OpResponse::RET_SUCCESS, array(), '');
     }
 

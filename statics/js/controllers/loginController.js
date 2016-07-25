@@ -82,6 +82,9 @@ app.controller('loginController', function($scope, $rootScope, $http, $state) {
         $http.post('/index.php?r=site/ajaxLogin', $scope.user).success(function (d) {
             if (d.ret == '1') {
                 $rootScope.isLogin = true;
+                $rootScope.userId = d.data.userId;
+                $rootScope.userName = d.data.userName;
+
                 $state.go('app.application.list');
             } else {
                 // Ë¢ÐÂÑéÖ¤Âë

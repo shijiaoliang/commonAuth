@@ -58,7 +58,14 @@ app.controller('applicationController', function($scope, $rootScope, $q, $http, 
             templateUrl: 'applicationModal.html',
             size: 'md',
             controller: function ($scope) {
-                //appName, appCode, appUrl
+                $scope.vm = {
+                    title:'新增应用'
+                };
+                if (item) {
+                    $scope.vm.title = '编辑应用';
+                }
+
+                //ngData
                 $scope.ngData = item || {};
 
                 if (item) {
@@ -69,17 +76,15 @@ app.controller('applicationController', function($scope, $rootScope, $q, $http, 
                     instance.close();
                 };
                 $scope.ok = function(formObj) {
-                    $http.post('/index.php?r=application/save', $scope.ngData).success(function (res) {
+                    var data = {ngData:{
+                        app_id: $scope.ngData.appId,
+                        app_name: $scope.ngData.app_name,
+                        app_code:$scope.ngData.app_code,
+                        app_url: $scope.ngData.app_url
+                    }};
+                    $http.post('/index.php?r=application/save', data).success(function (res) {
                         tipDialog.tip(res.errMsg);
-
-                        if (res.ret == 1) {
-                            var result = res.data;
-                            if (item) {
-                                item = result;
-                            } else {
-                                warpScope.search();
-                            }
-                        }
+                        warpScope.search();
                     });
 
                     instance.close();
@@ -89,6 +94,16 @@ app.controller('applicationController', function($scope, $rootScope, $q, $http, 
     };
 
     $scope.switch = function(item, event) {
-        //
+        dialog.confirm('确定要执行该操作吗?', function () {
+            var data = {ngData:{
+                app_id: item.app_id
+            }};
+            $http.post('/index.php?r=application/switch', data).success(function (res) {
+                tipDialog.tip(res.errMsg);
+                $scope.search();
+            });
+
+            instance.close();
+        });
     };
 });

@@ -42,7 +42,7 @@ return array(
             'class' => 'CCacheHttpSession',
             'cacheID' => 'cache',
             'cookieMode' => 'only',
-            'timeout' => 1200,
+            'timeout' => 3600,
         ),
         'db' => array(
             'connectionString' => 'mysql:host=127.0.0.1;dbname=auth',

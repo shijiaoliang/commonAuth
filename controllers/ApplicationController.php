@@ -42,25 +42,23 @@ class ApplicationController extends BaseController {
         //校验权限
         //$this->checkPower(PrivilegeCode::PRI_Logistics_QUERY);
 
-        if (!ParamCheck::checkArray($_POST, array('app_name', 'app_code', 'app_url'))) {
+        $ngData = Yii::app()->getRequest()->getPost('ngData');
+        if (!ParamCheck::checkArray($ngData, array('app_name', 'app_code', 'app_url'))) {
             $this->retJSON(OpResponse::RET_ERROR, null, '参数缺省!');
         }
 
-        $scenario = 'insert';
         $appId = 0;
-        if (!empty($_POST['app_id'])) {
-            $appId = (int)$_POST['app_id'];
-            $scenario = 'update';
+        if (!empty($ngData['app_id'])) {
+            $appId = (int)$ngData['app_id'];
         }
 
-        $model = new AppAR($scenario);
         if ($appId) {
-            $model->setIsNewRecord(false);
+            $model = AppAR::model()->findByPk($appId);
+        } else {
+            $model = new AppAR();
         }
-        $model->attributes = $_POST;
-        if (!$appId) {
-            $model->app_status = 10;
-        }
+
+        $model->attributes = $ngData;
 
         $res = $model->save();
         if (!$res) {
@@ -71,10 +69,38 @@ class ApplicationController extends BaseController {
         $data = array();
         $msg = '添加成功';
         if ($appId) {
-            $data = AppAR::model()->findByPk($appId);
             $msg = '更新成功';
         }
+        $this->retJSON(OpResponse::RET_SUCCESS, $data, $msg);
+    }
 
+    //切换应用是否可用
+    public function actionSwitch() {
+        //校验权限
+        //$this->checkPower(PrivilegeCode::PRI_Logistics_QUERY);
+
+        $ngData = Yii::app()->getRequest()->getPost('ngData');
+        if (!ParamCheck::checkArray($ngData, array('app_id'))) {
+            $this->retJSON(OpResponse::RET_ERROR, null, '参数缺省!');
+        }
+
+        $appId = (int)$ngData['app_id'];
+        $model = AppAR::model()->findByPk($appId);
+        $agoStatus = $model->app_status;
+        $updateStatus = 10;
+        if ($agoStatus == 10) {
+            $updateStatus = 20;
+        }
+        $model->app_status = $updateStatus;
+
+        $res = $model->save();
+        if (!$res) {
+            $errMsg = BaseModel::getFirstErrMsg($model);
+            $this->retJSON(OpResponse::RET_ERROR, null, $errMsg);
+        }
+
+        $data = array();
+        $msg = '操作成功';
         $this->retJSON(OpResponse::RET_SUCCESS, $data, $msg);
     }
 }

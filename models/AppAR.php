@@ -39,7 +39,7 @@ class AppAR extends BaseModel {
             array(
                 'app_code',
                 'unique',
-                'on' => 'insert'
+                'on' => 'insert, update'
             ),
         );
     }
